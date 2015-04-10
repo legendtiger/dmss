@@ -1,1 +1,2 @@
 hello world? wow! It's really bad!
+Git is free software distributed under the GPL.
