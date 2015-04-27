@@ -15,21 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="stdafx.h">
+    <ClInclude Include="SDLWindow.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.h">
+    <ClInclude Include="SDLUtil.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="SDLWindow.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="DMSSPlayer.cpp">
+    <ClCompile Include="SDLUtil.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DMSSPlayerEntry.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
