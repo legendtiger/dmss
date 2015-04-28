@@ -21,6 +21,21 @@
     <ClInclude Include="SDLUtil.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="SDLObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLItemBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLPicture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLCommon.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLButton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SDLWindow.cpp">
@@ -30,6 +45,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DMSSPlayerEntry.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLItemBase.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLPicture.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLButton.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

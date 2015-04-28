@@ -1,14 +1,8 @@
-#pragma once
+#ifndef __DMSS_UTILITY_H
+#define __DMSS_UTILITY_H
 
 #include <string>
-#ifdef __cplusplus
-extern "C"
-{
-	#include "SDL.h"
-}
-#endif
-#pragma comment(lib, "SDL2.lib")
-#pragma comment(lib, "SDL2main.lib")
+#include "SDLCommon.h"
 
 class SDLUtil
 {
@@ -32,4 +26,4 @@ public:
 	// ªÒ»°SDL¥ÌŒÛ
 	static std::string GetError();
 };
-
+#endif

@@ -1,0 +1,40 @@
+#ifndef __DMSS_ITEM_BASE_H
+#define __DMSS_ITEM_BASE_H
+
+#include "SDLCommon.h"
+#include "SDLObject.h"
+
+class SDLWindow;
+
+class SDLItemBase :	public SDLObject
+{
+private:
+	// 显示位置大小
+	SDL_Rect m_rt;
+
+	// 渲染器
+	SDLWindow *m_pParent = NULL;
+
+public:
+	virtual ~SDLItemBase();
+	SDLItemBase(SDLWindow& parent);
+
+	// 设置item位置
+	void SetPosition(int x, int y);
+
+	// 设置item大小
+	void SetSize(int w, int h);
+
+	// 刷新item
+	virtual void Flip() = 0;
+
+	// 抠色
+	void colorKey(Uint8 r, Uint8 g, Uint8 b, Uint32 flag);
+
+	// 获取item位置大小
+	SDL_Rect GetRect();
+protected:
+	SDL_Renderer * GetRenderer();	
+};
+
+#endif

@@ -10,6 +10,8 @@ SDLWindow::SDLWindow(std::string title, int w, int h, Uint32 flags)
 
 SDLWindow::~SDLWindow()
 {
+	SDL_DestroyRenderer(this->m_pRenderer);
+	SDL_DestroyWindow(this->m_pWindow);
 }
 
 
@@ -25,8 +27,13 @@ void SDLWindow::show()
 
 	// 显示窗口
 	SDL_RenderClear(this->m_pRenderer);
-	SDL_RenderPresent(this->m_pRenderer);
+	SDL_RenderPresent(this->m_pRenderer);	
+}
 
+
+// 消息循环
+void SDLWindow::EventLoop()
+{
 	bool quitFlag = false;
 	// 开启消息循环
 	SDL_Event event = { 0 };
@@ -43,5 +50,49 @@ void SDLWindow::show()
 		default:
 			break;
 		}
+		this->Flip();
 	}
+}
+
+// 移动窗口
+void SDLWindow::Move(int x, int y)
+{
+	SDL_SetWindowPosition(this->m_pWindow, x, y);
+}
+
+bool SDLWindow::HandleEvent(SDL_Event &event)
+{
+	return false;
+}
+
+SDLWindow & SDLWindow::Clone()
+{
+	return *this;
+}
+
+// 刷新item
+void SDLWindow::Flip()
+{
+	// 显示窗口
+	SDL_RenderClear(this->m_pRenderer);
+	for (int i = 0; i < this->m_items.size(); i++)
+	{
+		this->m_items[i]->Flip();
+	}
+	SDL_RenderPresent(this->m_pRenderer);
+}
+
+// 添加显示对象
+bool SDLWindow::Add(SDLItemBase *item)
+{
+	int len = this->m_items.size();
+	for (int i = 0; i < len; i++)
+	{
+		if (this->m_items.at(i) == item)
+		{
+			return false;
+		}
+	}
+	this->m_items.push_back(item);
+	return true;
 }

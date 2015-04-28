@@ -1,19 +1,19 @@
-#pragma once
+#ifndef __DMSS_WINDOW_H
+#define __DMSS_WINDOW_H
+
+#include "SDLCommon.h"
+#include "SDLObject.h"
+#include "SDLItemBase.h"
 
 #include <string>
-#ifdef __cplusplus
-extern "C"
-{
-	#include "SDL.h"
-}
-#endif
+#include <vector>
 
-class SDLWindow
+class SDLWindow : public SDLObject
 {
 public:
 	static const int DEFAULT_WIDTH = 1024;
 	static const int DEFAULT_HIGHT = 768;
-	static const int DEFAULT_FLAGS = SDL_WINDOW_OPENGL;
+	static const int DEFAULT_FLAGS = SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI;
 
 public:
 	SDLWindow(std::string title, int w = DEFAULT_WIDTH, int h = DEFAULT_HIGHT, Uint32 flags = DEFAULT_FLAGS);
@@ -29,12 +29,41 @@ public:
 	void show();
 	// 窗口标题
 	std::string m_title;
-	// 窗口宽度
 
 private:
+	// 窗口尺寸
 	int m_width;
-private:
 	int m_height;
+
+	// 窗口标志
 	Uint32 m_flags;
+
+private:
+	// 保存显示对象
+	std::vector < SDLItemBase*> m_items;
+
+public:
+	// 消息循环
+	void EventLoop();
+
+	// 移动窗口
+	void Move(int x, int y);
+
+	// 继承SDLObject的HandleEvent方法
+	bool HandleEvent(SDL_Event &event);
+
+	// 继承SDLObject的Clone方法
+	SDLWindow & Clone();
+
+	// 刷新窗口
+	void Flip();
+
+	// 定义友元类
+	friend class SDLItemBase;
+
+protected:
+	// 添加显示对象
+	bool Add(SDLItemBase *item);
 };
 
+#endif
