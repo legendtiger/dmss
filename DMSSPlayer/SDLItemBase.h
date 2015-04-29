@@ -17,7 +17,7 @@ private:
 
 public:
 	virtual ~SDLItemBase();
-	SDLItemBase(SDLWindow& parent);
+	SDLItemBase(SDLWindow& parent, int x=0, int y=0, int w=0, int h=0);
 
 	// 设置item位置
 	void SetPosition(int x, int y);
@@ -26,15 +26,19 @@ public:
 	void SetSize(int w, int h);
 
 	// 刷新item
-	virtual void Flip() = 0;
+	virtual void Flip();
 
 	// 抠色
-	void colorKey(Uint8 r, Uint8 g, Uint8 b, Uint32 flag);
+	virtual void colorKey(Uint8 r, Uint8 g, Uint8 b, Uint32 flag = SDL_TRUE);
 
 	// 获取item位置大小
 	SDL_Rect GetRect();
+
+	virtual bool PointInItem(int x, int y);
 protected:
-	SDL_Renderer * GetRenderer();	
+	SDL_Renderer * GetRenderer();
+
+	virtual SDL_Texture * DisplayTexture()=0;
 };
 
 #endif

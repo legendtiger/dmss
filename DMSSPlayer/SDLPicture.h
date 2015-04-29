@@ -12,7 +12,10 @@ public:
 	~SDLPicture();
 
 public:
-	void Flip();
+	bool HandleEvent(SDL_Event &event);
+
+protected:
+	SDL_Texture * DisplayTexture();
 };
 
 #endif

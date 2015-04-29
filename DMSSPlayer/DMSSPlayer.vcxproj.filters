@@ -36,6 +36,12 @@
     <ClInclude Include="SDLButton.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="FFCommon.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLVideoWnd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SDLWindow.cpp">
@@ -54,6 +60,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SDLButton.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLObject.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLVideoWnd.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

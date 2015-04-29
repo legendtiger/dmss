@@ -46,8 +46,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>K:\ThirdLib\sdl\include;$(IncludePath)</IncludePath>
-    <LibraryPath>K:\ThirdLib\sdl\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>K:\ThirdLib\ffmpeg\include;K:\ThirdLib\sdl\include;$(IncludePath)</IncludePath>
+    <LibraryPath>K:\ThirdLib\ffmpeg\lib;K:\ThirdLib\sdl\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -78,23 +78,28 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FFCommon.h" />
     <ClInclude Include="SDLButton.h" />
     <ClInclude Include="SDLCommon.h" />
     <ClInclude Include="SDLItemBase.h" />
     <ClInclude Include="SDLObject.h" />
     <ClInclude Include="SDLPicture.h" />
     <ClInclude Include="SDLUtil.h" />
+    <ClInclude Include="SDLVideoWnd.h" />
     <ClInclude Include="SDLWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMSSPlayerEntry.cpp" />
     <ClCompile Include="SDLButton.cpp" />
     <ClCompile Include="SDLItemBase.cpp" />
+    <ClCompile Include="SDLObject.cpp" />
     <ClCompile Include="SDLPicture.cpp" />
     <ClCompile Include="SDLUtil.cpp" />
+    <ClCompile Include="SDLVideoWnd.cpp" />
     <ClCompile Include="SDLWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -14,13 +14,13 @@ SDLWindow::~SDLWindow()
 	SDL_DestroyWindow(this->m_pWindow);
 }
 
-
 void SDLWindow::show()
 {
 	// 创建窗口和Renderer
 	SDL_CreateWindowAndRenderer(this->m_width, this->m_height, this->m_flags, &this->m_pWindow, &this->m_pRenderer);
 	SDL_SetWindowTitle(this->m_pWindow, this->m_title.c_str());
 	SDL_SetRenderDrawColor(this->m_pRenderer, 0, 0, 0, 255);
+
 	// make the scaled rendering look smoother.
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");  
 	SDL_RenderSetLogicalSize(this->m_pRenderer, this->m_width, this->m_height);
@@ -29,7 +29,6 @@ void SDLWindow::show()
 	SDL_RenderClear(this->m_pRenderer);
 	SDL_RenderPresent(this->m_pRenderer);	
 }
-
 
 // 消息循环
 void SDLWindow::EventLoop()
@@ -41,7 +40,7 @@ void SDLWindow::EventLoop()
 	{
 		SDL_Delay(100);
 		SDL_PumpEvents();
-		SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_QUIT, SDL_QUIT);
+		SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_QUIT, SDL_LASTEVENT);
 		switch (event.type)
 		{
 		case SDL_QUIT:
@@ -51,6 +50,7 @@ void SDLWindow::EventLoop()
 			break;
 		}
 		this->Flip();
+		this->HandleEvent(event);
 	}
 }
 
@@ -62,7 +62,13 @@ void SDLWindow::Move(int x, int y)
 
 bool SDLWindow::HandleEvent(SDL_Event &event)
 {
-	return false;
+	bool flag = false;
+	int len = this->m_items.size();
+	for (int i = 0; i < len; i++)
+	{
+		flag |= this->m_items[i]->HandleEvent(event);
+	}
+	return flag;
 }
 
 SDLWindow & SDLWindow::Clone()
@@ -75,7 +81,8 @@ void SDLWindow::Flip()
 {
 	// 显示窗口
 	SDL_RenderClear(this->m_pRenderer);
-	for (int i = 0; i < this->m_items.size(); i++)
+	int len = this->m_items.size();
+	for (int i = 0; i < len; i++)
 	{
 		this->m_items[i]->Flip();
 	}
