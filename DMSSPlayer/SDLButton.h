@@ -34,5 +34,7 @@ public:
 
 protected:
 	SDL_Texture * DisplayTexture();
+
+	bool Changed();
 };
 #endif

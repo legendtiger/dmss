@@ -25,6 +25,10 @@ private:
 
 	// SDL Renderer
 	SDL_Renderer *m_pRenderer = NULL;
+
+	// 是否刷新窗口
+	bool m_isChanged = true;
+
 public:
 	void show();
 	// 窗口标题
@@ -58,12 +62,19 @@ public:
 	// 刷新窗口
 	void Flip();
 
+	SDL_Rect GetRect();
+
 	// 定义友元类
 	friend class SDLItemBase;
 
 protected:
 	// 添加显示对象
 	bool Add(SDLItemBase *item);
+
+private:
+	void Create(int w, int h);
+
+	bool ItemIsChanged();
 };
 
 #endif

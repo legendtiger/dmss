@@ -61,3 +61,8 @@ void SDLItemBase::Flip()
 {
 	SDL_RenderCopy(this->GetRenderer(), this->DisplayTexture(), NULL, &this->GetRect());
 }
+
+SDLWindow *SDLItemBase::GetParent()
+{
+	return this->m_pParent;
+}

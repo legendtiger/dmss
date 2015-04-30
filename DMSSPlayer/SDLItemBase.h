@@ -35,10 +35,15 @@ public:
 	SDL_Rect GetRect();
 
 	virtual bool PointInItem(int x, int y);
+
+	// »ñÈ¡¸¸´°¿Ú
+	SDLWindow *GetParent();
+
+	virtual bool Changed() = 0;
 protected:
 	SDL_Renderer * GetRenderer();
 
-	virtual SDL_Texture * DisplayTexture()=0;
+	virtual SDL_Texture * DisplayTexture()=0;	
 };
 
 #endif

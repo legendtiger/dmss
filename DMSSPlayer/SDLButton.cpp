@@ -52,6 +52,11 @@ SDL_Texture * SDLButton::DisplayTexture()
 	return NULL;
 }
 
+bool SDLButton::Changed()
+{
+	return false;
+}
+
 // ÉèÖÃÈ¥³ıÉ«
 void SDLButton::colorKey(Uint8 r, Uint8 g, Uint8 b, Uint32 flag)
 {

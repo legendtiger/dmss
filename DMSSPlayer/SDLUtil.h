@@ -25,5 +25,7 @@ public:
 
 	// 获取SDL错误
 	static std::string GetError();
+	// 取系统当前时间，毫秒
+	static uint64_t CurrentTime();
 };
 #endif

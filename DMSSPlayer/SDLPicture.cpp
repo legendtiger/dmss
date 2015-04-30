@@ -26,3 +26,8 @@ SDL_Texture * SDLPicture::DisplayTexture()
 {
 	return this->m_pTexture;
 }
+
+bool SDLPicture::Changed()
+{
+	return false;
+}

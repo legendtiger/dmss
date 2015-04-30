@@ -1,5 +1,5 @@
 #include "SDLUtil.h"
-
+#include <sys/timeb.h>
 
 
 SDLUtil::SDLUtil()
@@ -42,4 +42,12 @@ void SDLUtil::CloseSDL()
 std::string SDLUtil::GetError()
 {
 	return SDL_GetError();
+}
+
+// 取系统当前时间，毫秒
+uint64_t SDLUtil::CurrentTime()
+{
+	timeb t;
+	ftime(&t);
+	return 1000 * t.time + t.millitm;
 }
