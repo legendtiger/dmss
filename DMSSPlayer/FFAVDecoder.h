@@ -1,0 +1,83 @@
+#ifndef __DMSS_FFAVDECODER_H
+#define __DMSS_FFAVDECODER_H
+#include "FFCommon.h"
+#include "SDLVideoWnd.h"
+#include <thread>
+
+class FFAVDecoder
+{
+private:
+	static const int DELAYTIME = 1;
+	static const int MAX_AUDIO_FRAME_SIZE = 192000;
+
+private:
+	// 记录媒体参数
+	AVFormatContext *m_pFormatCtx = NULL;
+
+	// 记录转换目标格式
+	AVPixelFormat m_fmt;
+
+	// 记录音视频通道
+	int m_videoStream = -1;
+	int m_audioStream = -1;
+
+	// 记录音视频编码方式
+	AVCodecContext *m_pVCodecCtx = NULL;
+	AVCodecContext *m_pACodecCtx = NULL;
+
+	// 找到对应解码器
+	AVCodec *m_pVCodec = NULL;
+	AVCodec *m_pACodec = NULL;
+
+	// 原始视频帧
+	AVFrame* m_pFrame = NULL;
+
+	// 转换后的目标视频帧
+	AVFrame* m_pFrameRGB = NULL;
+	// 转换后的音频目标
+	AVFrame* m_pAudioFrame = NULL;
+	uint8_t *m_pAudioBuffer = NULL;
+	int m_audioSize;
+
+	// 解码需要的缓冲区
+	uint8_t *m_buffer = NULL;
+
+	// 图形转换对象
+	struct SwsContext *m_pSwsCtx = NULL;
+
+	// 音频转换对象
+	struct SwrContext *m_pASwrCtx = NULL;
+
+	SDLVideoWnd & m_textuer;
+
+	std::thread *m_pThreadDecoder;
+
+public:
+	FFAVDecoder(SDLVideoWnd &texture, AVPixelFormat fmt = AV_PIX_FMT_YUV420P);
+	~FFAVDecoder();
+
+public:
+	// 播放流
+	int Play(std::string url);
+
+private:
+	void decoding();
+
+	// 获取格式信息
+	bool GetFormatContext(std::string url);
+
+	// 获取流
+	int FindStream(AVMediaType type);
+
+private:
+	// 解码媒体文件
+	static int Run(FFAVDecoder* decoder);
+
+	// 取系统当前时间，毫秒
+	static uint64_t CurrentTime();
+
+	// 解析视频数据
+	bool DecodingVedio();
+};
+
+#endif

@@ -44,3 +44,8 @@ void SDLObject::Update(void *data)
 		(*it)->Update(data);
 	}
 }
+
+void SDLObject::Clean()
+{
+
+}

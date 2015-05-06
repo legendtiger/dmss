@@ -6,9 +6,17 @@
 class SDLVideoWnd :	public SDLItemBase
 {
 private:
+	static const int SDL_AUDIO_BUFFER_SIZE = 1024;
+
 	SDL_Texture *m_pVTexture = NULL;
 
 	bool m_isChanged = false;
+
+	// 解码线程退出/完成
+	bool m_decodeFinished;
+
+	// 结束播放
+	bool m_stopFlag;
 
 public:
 	SDLVideoWnd(SDLWindow& parent, int x = 0, int y = 0, int w = 800, int h = 600);
@@ -21,15 +29,25 @@ public:
 	// 初始化视频
 	void InitVideo(int w, int h, Uint32 format = SDL_PIXELFORMAT_YV12);
 
-public:
 	bool HandleEvent(SDL_Event &event);
 
 	void Flip();
+
+	// 停止播放
+	bool CanStop();
+
+	// 解码线程完成或终止
+	void DecodeFinished();
 
 protected:
 	SDL_Texture * DisplayTexture();
 
 	bool Changed();
+
+	void Clean();	
+public:
+	// 初始化音频
+	void InitAudio(int freq, int format, int channels, int samples = SDL_AUDIO_BUFFER_SIZE, void* userdata = NULL);
 };
 
 #endif

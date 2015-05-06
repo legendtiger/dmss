@@ -1,23 +1,25 @@
 #include "SDLWindow.h"
+#include "SDLUtil.h"
 
 SDLWindow::SDLWindow(std::string title, int w, int h, Uint32 flags)
 : m_width(w)
 , m_height(h)
 , m_flags(flags)
 {
-	this->m_title = title;		
+	SDLUtil::InitSDL();
+	this->m_title = title;
+	this->Create(this->m_width, this->m_height);
 }
 
 SDLWindow::~SDLWindow()
 {
 	SDL_DestroyRenderer(this->m_pRenderer);
 	SDL_DestroyWindow(this->m_pWindow);
+	SDLUtil::CloseSDL();
 }
 
 void SDLWindow::show()
 {
-	this->Create(this->m_width, this->m_height);
-
 	// 显示窗口
 	SDL_RenderClear(this->m_pRenderer);
 	SDL_RenderPresent(this->m_pRenderer);	
@@ -41,33 +43,6 @@ void SDLWindow::Create(int w, int h)
 	SDL_RenderSetLogicalSize(this->m_pRenderer, w, h);
 }
 
-// 消息循环
-void SDLWindow::EventLoop()
-{
-	bool quitFlag = false;
-	
-	// 开启消息循环
-	SDL_Event event = { 0 };
-	int flag = 0;
-	while (!quitFlag)
-	{
-		SDL_PumpEvents();
-		SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_QUIT, SDL_LASTEVENT);
-		switch (event.type)
-		{
-		case SDL_QUIT:
-			quitFlag = true;
-			break;
-		default:
-			break;
-		}
-		//this->Flip();
-		this->HandleEvent(event);
-
-		SDL_Delay(40);
-	}
-}
-
 // 移动窗口
 void SDLWindow::Move(int x, int y)
 {
@@ -76,6 +51,38 @@ void SDLWindow::Move(int x, int y)
 
 bool SDLWindow::HandleEvent(SDL_Event &event)
 {
+	Uint32 windowID = SDL_GetWindowID(this->m_pWindow);
+	switch (event.type)
+	{
+	case SDL_WINDOWEVENT:
+		if (event.window.windowID == windowID)
+		{
+			switch (event.window.event)
+			{
+				// 此处发现改变窗口大小，视频不刷新需要修改源码中的代码，
+				// 将SDL_OnWindowResized中的SDL_WINDOWEVENT_SIZE_CHANGED更改为SDL_WINDOWEVENT_RESIZED。
+			case SDL_WINDOWEVENT_RESIZED:
+			case SDL_WINDOWEVENT_SIZE_CHANGED:
+			case SDL_WINDOWEVENT_MINIMIZED:
+			case SDL_WINDOWEVENT_MAXIMIZED:
+			case SDL_WINDOWEVENT_RESTORED:			
+				SDL_RenderSetLogicalSize(this->m_pRenderer, event.window.data1, event.window.data2);
+				SDL_RenderSetViewport(this->m_pRenderer, NULL);
+				m_isChanged = true;
+				break;
+
+			case SDL_WINDOWEVENT_CLOSE:
+				event.type = SDL_QUIT;
+				SDL_PushEvent(&event);
+				break;
+
+			default:
+				break;
+			}			
+		}
+		
+		break;
+	}
 	bool flag = false;
 	int len = this->m_items.size();
 	for (int i = 0; i < len; i++)
@@ -117,6 +124,14 @@ bool SDLWindow::ItemIsChanged()
 	}
 
 	return changed;
+}
+void SDLWindow::Clean()
+{
+	int len = this->m_items.size();
+	for (int i = 0; i < len; i++)
+	{
+		this->m_items[i]->Clean();
+	}
 }
 
 // 添加显示对象

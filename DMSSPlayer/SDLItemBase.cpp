@@ -59,7 +59,10 @@ bool SDLItemBase::PointInItem(int x, int y)
 
 void SDLItemBase::Flip()
 {
-	SDL_RenderCopy(this->GetRenderer(), this->DisplayTexture(), NULL, &this->GetRect());
+	if (this->GetRenderer() != NULL)
+	{
+		SDL_RenderCopy(this->GetRenderer(), this->DisplayTexture(), NULL, &this->GetRect());
+	}	
 }
 
 SDLWindow *SDLItemBase::GetParent()

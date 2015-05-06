@@ -42,6 +42,15 @@
     <ClInclude Include="SDLVideoWnd.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="SDLApplication.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FFAVDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FFPacketQueue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SDLWindow.cpp">
@@ -66,6 +75,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SDLVideoWnd.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLApplication.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FFAVDecoder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FFPacketQueue.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

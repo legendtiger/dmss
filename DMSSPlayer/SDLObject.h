@@ -37,6 +37,8 @@ public:
 	// Çå¿Õ¼àÌı¶ÔÏó
 	virtual void ClearListener();
 
+	virtual void Clean();
+
 protected:
 	virtual void Update(void *data);
 

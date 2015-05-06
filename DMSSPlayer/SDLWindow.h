@@ -13,7 +13,7 @@ class SDLWindow : public SDLObject
 public:
 	static const int DEFAULT_WIDTH = 1024;
 	static const int DEFAULT_HIGHT = 768;
-	static const int DEFAULT_FLAGS = SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI;
+	static const int DEFAULT_FLAGS = SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_RESIZABLE;
 
 public:
 	SDLWindow(std::string title, int w = DEFAULT_WIDTH, int h = DEFAULT_HIGHT, Uint32 flags = DEFAULT_FLAGS);
@@ -47,9 +47,6 @@ private:
 	std::vector < SDLItemBase*> m_items;
 
 public:
-	// 消息循环
-	void EventLoop();
-
 	// 移动窗口
 	void Move(int x, int y);
 
@@ -62,7 +59,11 @@ public:
 	// 刷新窗口
 	void Flip();
 
+	// 获取显示窗口
 	SDL_Rect GetRect();
+
+	// 通知窗口释放资源
+	void Clean();
 
 	// 定义友元类
 	friend class SDLItemBase;
@@ -74,7 +75,8 @@ protected:
 private:
 	void Create(int w, int h);
 
-	bool ItemIsChanged();
+	// 子窗口是否改变，需要重绘
+	bool ItemIsChanged();	
 };
 
 #endif

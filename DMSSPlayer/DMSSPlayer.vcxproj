@@ -82,7 +82,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FFAVDecoder.h" />
     <ClInclude Include="FFCommon.h" />
+    <ClInclude Include="FFPacketQueue.h" />
+    <ClInclude Include="SDLApplication.h" />
     <ClInclude Include="SDLButton.h" />
     <ClInclude Include="SDLCommon.h" />
     <ClInclude Include="SDLItemBase.h" />
@@ -94,6 +97,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMSSPlayerEntry.cpp" />
+    <ClCompile Include="FFAVDecoder.cpp" />
+    <ClCompile Include="FFPacketQueue.cpp" />
+    <ClCompile Include="SDLApplication.cpp" />
     <ClCompile Include="SDLButton.cpp" />
     <ClCompile Include="SDLItemBase.cpp" />
     <ClCompile Include="SDLObject.cpp" />
