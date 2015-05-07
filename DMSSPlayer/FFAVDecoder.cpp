@@ -18,6 +18,12 @@ FFAVDecoder::~FFAVDecoder()
 	av_frame_free(&m_pAudioFrame);
 	av_free(m_buffer);
 
+	if (m_pAudioBuffer)
+	{
+		//av_freep(&m_pAudioBuffer[0]);
+	}		
+	//av_freep(&m_pAudioBuffer);
+
 	swr_free(&m_pASwrCtx);
 
 	avcodec_close(this->m_pACodecCtx);
@@ -59,49 +65,37 @@ int FFAVDecoder::FindStream(AVMediaType type)
 	return -1;
 }
 
-// 播放流
-int FFAVDecoder::Play(std::string url)
+bool FFAVDecoder::InitVedio()
 {
-	// 获取流信息
-	if (!GetFormatContext(url))
-	{
-		return -1;
-	}
-
 	// 找到视频流/音频流
 	this->m_videoStream = this->FindStream(AVMEDIA_TYPE_VIDEO);
-	this->m_audioStream = this->FindStream(AVMEDIA_TYPE_AUDIO);
-	if (this->m_videoStream < 0 || this->m_audioStream < 0)
+	if (this->m_videoStream < 0)
 	{
-		return -1;
+		return false;
 	}
 
 	// 取得编码方式
 	this->m_pVCodecCtx = this->m_pFormatCtx->streams[this->m_videoStream]->codec;
-	this->m_pACodecCtx = this->m_pFormatCtx->streams[this->m_audioStream]->codec;
 
 	// 找到对应解码器
 	m_pVCodec = avcodec_find_decoder(m_pVCodecCtx->codec_id);
-	m_pACodec = avcodec_find_decoder(m_pACodecCtx->codec_id);
-	if (m_pVCodec == NULL || m_pACodec == NULL)
+	if (m_pVCodec == NULL)
 	{
-		return -1;
+		return false;
 	}
 
 	// 打开解码器
-	if (avcodec_open2(m_pVCodecCtx, m_pVCodec, NULL) < 0 ||
-		avcodec_open2(m_pACodecCtx, m_pACodec, NULL) < 0)
+	if (avcodec_open2(m_pVCodecCtx, m_pVCodec, NULL) < 0 )
 	{
-		return -1;
+		return false;
 	}
 
 	// 分配解码帧
 	this->m_pFrame = av_frame_alloc();
 	this->m_pFrameRGB = av_frame_alloc();
-	this->m_pAudioFrame = av_frame_alloc();
-	if (m_pFrame == NULL || m_pFrameRGB == NULL | m_pAudioFrame == NULL)
+	if (m_pFrame == NULL || m_pFrameRGB == NULL)
 	{
-		return -1;
+		return false;
 	}
 
 	// 分配解码缓冲区
@@ -115,29 +109,79 @@ int FFAVDecoder::Play(std::string url)
 	m_pSwsCtx = sws_getContext(m_pVCodecCtx->width, m_pVCodecCtx->height,
 		m_pVCodecCtx->pix_fmt, m_pVCodecCtx->width, m_pVCodecCtx->height, m_fmt, SWS_BICUBIC, NULL, NULL, NULL);
 
-	m_pAudioFrame->format = AV_SAMPLE_FMT_S16;
-	m_pAudioFrame->sample_rate = m_pACodecCtx->sample_rate;
-	m_pAudioFrame->channel_layout = av_get_default_channel_layout(m_pACodecCtx->channels);
-	
-	//Out Audio Param  
-	uint64_t out_channel_layout = AV_CH_LAYOUT_STEREO;
-	int out_nb_samples = 1024;
-	AVSampleFormat out_sample_fmt = AV_SAMPLE_FMT_S16;
-	int out_sample_rate = m_pACodecCtx->sample_rate;//44100;
-	int out_channels = av_get_channel_layout_nb_channels(out_channel_layout);
-	//Out Buffer Size  
-	m_audioSize = av_samples_get_buffer_size(NULL, out_channels, out_nb_samples, out_sample_fmt, 1);
-	m_pAudioBuffer = (uint8_t *)av_malloc(MAX_AUDIO_FRAME_SIZE * 2);
+	return true;
+}
 
-	int in_channel_layout = av_get_default_channel_layout(m_pACodecCtx->channels);
-	m_pASwrCtx = swr_alloc();
-	m_pASwrCtx = swr_alloc_set_opts(m_pASwrCtx, out_channel_layout, out_sample_fmt, out_sample_rate,
-		in_channel_layout, m_pACodecCtx->sample_fmt, m_pACodecCtx->sample_rate, 0, NULL);
-	swr_init(m_pASwrCtx);
+bool FFAVDecoder::InitAudio()
+{
+	// 找到视频流/音频流
+	this->m_audioStream = this->FindStream(AVMEDIA_TYPE_AUDIO);
+	if (this->m_audioStream < 0)
+	{
+		return false;
+	}
+
+	// 取得编码方式
+	this->m_pACodecCtx = this->m_pFormatCtx->streams[this->m_audioStream]->codec;
+
+	// 找到对应解码器
+	m_pACodec = avcodec_find_decoder(m_pACodecCtx->codec_id);
+	if (m_pACodec == NULL)
+	{
+		return false;
+	}
+
+	// 打开解码器
+	if (avcodec_open2(m_pACodecCtx, m_pACodec, NULL) < 0)
+	{
+		return false;
+	}
+
+	// 分配解码帧
+	this->m_pAudioFrame = av_frame_alloc();
+	if (m_pAudioFrame == NULL)
+	{
+		return false;
+	}
 	
+	//Destination Audio Param 
+	this->m_dstChannelLayout = m_pACodecCtx->channel_layout;//av_get_default_channel_layout(m_pACodecCtx->channels);
+	int channels = av_get_channel_layout_nb_channels(m_pACodecCtx->channel_layout);
+	this->m_dstChannels = m_pACodecCtx->channels > 0 ? m_pACodecCtx->channels : channels;
+	this->m_dstSampleRate = m_pACodecCtx->sample_rate;
+	int in_channel_layout = m_pACodecCtx->channel_layout>0 ? m_pACodecCtx->channel_layout : av_get_default_channel_layout(m_pACodecCtx->channels);
+
+	m_pASwrCtx = swr_alloc_set_opts(m_pASwrCtx, m_dstChannelLayout, m_dstSampleFmt, m_dstSampleRate,
+		m_pACodecCtx->channel_layout, m_pACodecCtx->sample_fmt, m_pACodecCtx->sample_rate, 0, NULL);
+	if (m_pASwrCtx == NULL)
+	{
+		fprintf(stdout, "m_pASwrCtx 设置参数失败！\n");
+	}
+	swr_init(m_pASwrCtx);
+
+	//Out Buffer Size  
+	av_samples_alloc_array_and_samples(&m_pAudioBuffer, &m_audioSize, m_dstChannels, m_dstSampleRate, m_dstSampleFmt, 0);
+
+	return true;
+}
+
+// 播放流
+int FFAVDecoder::Play(std::string url)
+{
+	// 获取流信息
+	if (!GetFormatContext(url))
+	{
+		return -1;
+	}
+
+	// 找到视频流/音频流
+	if (!(InitAudio() | InitVedio()))
+	{
+		return -1;
+	}
+
 	m_textuer.InitVideo(m_pVCodecCtx->width, m_pVCodecCtx->height);
-	//fprintf(stdout, "out_channels = %d\n", out_channels);
-	m_textuer.InitAudio(out_sample_rate, out_sample_fmt, out_channels, out_nb_samples);
+	m_textuer.InitAudio(m_dstSampleRate, m_dstSampleFmt, m_dstChannels, m_nbSamples);
 
 	// 创建解析线程
 	m_pThreadDecoder = new std::thread(FFAVDecoder::Run, this);
@@ -177,8 +221,31 @@ void FFAVDecoder::decoding()
 			packet.duration = (double)calc_duration / (double)(av_q2d(time_base1)*AV_TIME_BASE);
 		}
 
+		// 是音频帧
+		if (packet.stream_index == m_audioStream)
+		{
+			int total = packet.size;
+			do
+			{
+				//fprintf(stdout, "size = %d\n", total);
+				//fprintf(stdout, "channel_layout = %d\n", m_pFrame->channel_layout);
+				// 解码
+				total -= avcodec_decode_audio4(m_pACodecCtx, m_pFrame, &frameFinished, &packet);
+				if (frameFinished != 0)
+				{
+					int numSamplesOut = swr_convert(m_pASwrCtx, m_pAudioBuffer, MAX_AUDIO_FRAME_SIZE,(const uint8_t**)m_pFrame->extended_data, m_pFrame->nb_samples);
+
+					int dst_bufsize = numSamplesOut * m_pACodecCtx->channels * av_get_bytes_per_sample(m_pACodecCtx->sample_fmt);
+					SDL_QueueAudio(1, m_pAudioBuffer[0], dst_bufsize);
+				}
+				else
+				{
+					total = -1;
+				}
+			} while (total > 0);
+		}
 		// 是视频帧
-		if (packet.stream_index == m_videoStream)
+		else if (packet.stream_index == m_videoStream)
 		{
 			// 记录帧序号
 			frame_index++;
@@ -203,35 +270,6 @@ void FFAVDecoder::decoding()
 					std::this_thread::sleep_for(duration);
 				}
 			}
-		}
-		else if (packet.stream_index == m_audioStream)
-		{
-			int total = packet.size;
-			do
-			{
-				//fprintf(stdout, "size = %d\n", total);
-				// 解码
-				total -= avcodec_decode_audio4(m_pACodecCtx, m_pFrame, &frameFinished, &packet);
-				if (frameFinished != 0)
-				{
-					//fprintf(stdout, "size = %s\n", av_get_sample_fmt_name((AVSampleFormat)m_pFrame->format));
-					//fprintf(stdout, "size = %d \/ %d = %d\n", m_pFrame->nb_samples, m_pFrame->linesize[0], m_pFrame->linesize[0] / m_pFrame->nb_samples);
-					//if ()
-					swr_config_frame(m_pASwrCtx, this->m_pAudioFrame, this->m_pFrame);
-					if (0 == swr_convert_frame(m_pASwrCtx, this->m_pAudioFrame, this->m_pFrame))
-					{
-						fprintf(stdout, "size = %d \/ %d = %d\n", m_pAudioFrame->nb_samples, m_pAudioFrame->linesize[0], m_pAudioFrame->linesize[0] / m_pAudioFrame->nb_samples);
-						SDL_QueueAudio(1, *m_pAudioFrame->extended_data, m_pAudioFrame->linesize[0]);
-					}
-					/*int numSamplesOut = swr_convert(m_pASwrCtx, &m_pAudioBuffer, MAX_AUDIO_FRAME_SIZE, 
-						(const uint8_t**)m_pFrame->extended_data, m_pFrame->nb_samples);
-					SDL_QueueAudio(1, m_pAudioBuffer, numSamplesOut*m_pFrame->channels);*/
-				}
-				else
-				{
-					total = -1;
-				}
-			} while (total > 0);
 		}
 
 		av_free_packet(&packet);

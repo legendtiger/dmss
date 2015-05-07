@@ -36,7 +36,7 @@ private:
 	AVFrame* m_pFrameRGB = NULL;
 	// 转换后的音频目标
 	AVFrame* m_pAudioFrame = NULL;
-	uint8_t *m_pAudioBuffer = NULL;
+	uint8_t **m_pAudioBuffer = NULL;
 	int m_audioSize;
 
 	// 解码需要的缓冲区
@@ -51,6 +51,12 @@ private:
 	SDLVideoWnd & m_textuer;
 
 	std::thread *m_pThreadDecoder;
+private:
+	uint64_t m_dstChannelLayout = AV_CH_LAYOUT_STEREO;
+	int m_nbSamples = 1024;
+	AVSampleFormat m_dstSampleFmt = AV_SAMPLE_FMT_S16;
+	int m_dstSampleRate = 44100;
+	int m_dstChannels = 2;
 
 public:
 	FFAVDecoder(SDLVideoWnd &texture, AVPixelFormat fmt = AV_PIX_FMT_YUV420P);
@@ -68,6 +74,9 @@ private:
 
 	// 获取流
 	int FindStream(AVMediaType type);
+
+	bool InitVedio();
+	bool InitAudio();
 
 private:
 	// 解码媒体文件

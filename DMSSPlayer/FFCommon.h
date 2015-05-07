@@ -10,6 +10,8 @@ extern "C"
 #include "libavformat\avformat.h"
 #include "libswscale\swscale.h"
 #include "libswresample\swresample.h"
+#include "libavutil\avutil.h"
+#include "libavutil\fifo.h"
 
 #ifdef __cplusplus
 }

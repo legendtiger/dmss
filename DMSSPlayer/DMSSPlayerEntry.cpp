@@ -14,9 +14,11 @@ int main(int argc, char* argv[])
 	SDLVideoWnd player(window);
 	SDLButton bt(window, "", "k:/javastudy/button.bmp");
 	FFAVDecoder avDecoder(player);
-	avDecoder.Play("k:/javastudy/test.wmv");
-	SDLApplication app(&window);
-	app.Execute();
+	if (avDecoder.Play("k:/javastudy/test.avi") == 0)
+	{
+		SDLApplication app(&window);
+		app.Execute();
+	}	
 	return 0;
 }
 

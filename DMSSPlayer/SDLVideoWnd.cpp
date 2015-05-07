@@ -101,7 +101,7 @@ void SDLVideoWnd::InitAudio(int freq, int format, int channels, int samples, voi
 	}
 
 	fprintf(stdout, "freq相等？%s\n", wanted_spec.freq == spec.freq ? "true" : "false");
-	fprintf(stdout, "format相等？%s\n", wanted_spec.format == spec.format ? "true" : "false");
+	fprintf(stdout, "format相等%d=%d？%s\n", wanted_spec.format, spec.format, wanted_spec.format == spec.format ? "true" : "false");
 	fprintf(stdout, "channels相等？%s\n", wanted_spec.channels == spec.channels ? "true" : "false");
 	fprintf(stdout, "samples相等？%s\n", wanted_spec.samples == spec.samples ? "true" : "false");
 
