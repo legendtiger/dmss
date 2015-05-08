@@ -84,7 +84,7 @@ void SDLVideoWnd::DecodeFinished()
 
 
 // ≥ı ºªØ“Ù∆µ
-void SDLVideoWnd::InitAudio(int freq, int format, int channels, int samples, void* userdata)
+void SDLVideoWnd::InitAudio(int freq, int channels, int samples)
 {	
 	SDL_AudioSpec wanted_spec, spec;
 	wanted_spec.freq = freq;
@@ -93,7 +93,7 @@ void SDLVideoWnd::InitAudio(int freq, int format, int channels, int samples, voi
 	wanted_spec.silence = 0;
 	wanted_spec.samples = samples;
 	wanted_spec.callback = NULL;
-	wanted_spec.userdata = userdata;
+	wanted_spec.userdata = NULL;
 
 	if (SDL_OpenAudio(&wanted_spec, &spec) < 0)
 	{

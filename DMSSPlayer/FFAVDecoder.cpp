@@ -1,13 +1,18 @@
 #include "FFAVDecoder.h"
-#include <sys/timeb.h>
+#include <windows.h>
 
 
 FFAVDecoder::FFAVDecoder(SDLVideoWnd &texture, AVPixelFormat fmt)
 :m_textuer(texture)
+, m_duration(0)
+, m_status(UNRIPE)
 {
 	this->m_fmt = fmt;
 
-	av_register_all();	
+	avcodec_register_all();
+	avfilter_register_all();
+	av_register_all();
+	avformat_network_init();
 }
 
 
@@ -20,9 +25,9 @@ FFAVDecoder::~FFAVDecoder()
 
 	if (m_pAudioBuffer)
 	{
-		//av_freep(&m_pAudioBuffer[0]);
+		av_freep(&m_pAudioBuffer[0]);
 	}		
-	//av_freep(&m_pAudioBuffer);
+	av_freep(&m_pAudioBuffer);
 
 	swr_free(&m_pASwrCtx);
 
@@ -34,7 +39,7 @@ FFAVDecoder::~FFAVDecoder()
 
 bool FFAVDecoder::GetFormatContext(std::string url)
 {
-	// 打开视频文件
+	// 打开媒体文件
 	if (avformat_open_input(&this->m_pFormatCtx, url.c_str(), NULL, NULL) != 0)
 	{
 		return false;
@@ -46,6 +51,7 @@ bool FFAVDecoder::GetFormatContext(std::string url)
 		return false;
 	}
 
+	// 打印媒体信息
 	av_dump_format(m_pFormatCtx, 0, url.c_str(), 0);
 
 	return true;
@@ -144,66 +150,83 @@ bool FFAVDecoder::InitAudio()
 		return false;
 	}
 	
-	//Destination Audio Param 
-	this->m_dstChannelLayout = m_pACodecCtx->channel_layout;//av_get_default_channel_layout(m_pACodecCtx->channels);
+	// 创建转码对象 
+	int in_channel_layout = m_pACodecCtx->channel_layout>0 ? m_pACodecCtx->channel_layout : av_get_default_channel_layout(m_pACodecCtx->channels);
+	this->m_dstChannelLayout = in_channel_layout;
 	int channels = av_get_channel_layout_nb_channels(m_pACodecCtx->channel_layout);
 	this->m_dstChannels = m_pACodecCtx->channels > 0 ? m_pACodecCtx->channels : channels;
 	this->m_dstSampleRate = m_pACodecCtx->sample_rate;
-	int in_channel_layout = m_pACodecCtx->channel_layout>0 ? m_pACodecCtx->channel_layout : av_get_default_channel_layout(m_pACodecCtx->channels);
-
+	
+	// 创建转码对象 
 	m_pASwrCtx = swr_alloc_set_opts(m_pASwrCtx, m_dstChannelLayout, m_dstSampleFmt, m_dstSampleRate,
-		m_pACodecCtx->channel_layout, m_pACodecCtx->sample_fmt, m_pACodecCtx->sample_rate, 0, NULL);
+		in_channel_layout, m_pACodecCtx->sample_fmt, m_pACodecCtx->sample_rate, 0, NULL);
 	if (m_pASwrCtx == NULL)
 	{
 		fprintf(stdout, "m_pASwrCtx 设置参数失败！\n");
 	}
 	swr_init(m_pASwrCtx);
 
-	//Out Buffer Size  
+	// 分配转码buffer  
 	av_samples_alloc_array_and_samples(&m_pAudioBuffer, &m_audioSize, m_dstChannels, m_dstSampleRate, m_dstSampleFmt, 0);
 
 	return true;
 }
 
 // 播放流
-int FFAVDecoder::Play(std::string url)
+bool FFAVDecoder::Init(std::string url)
 {
 	// 获取流信息
 	if (!GetFormatContext(url))
 	{
-		return -1;
+		return false;
 	}
 
 	// 找到视频流/音频流
-	if (!(InitAudio() | InitVedio()))
+	bool flag = false;
+	if (InitVedio())
 	{
-		return -1;
+		flag = true;
+		m_textuer.InitVideo(m_pVCodecCtx->width, m_pVCodecCtx->height);
 	}
 
-	m_textuer.InitVideo(m_pVCodecCtx->width, m_pVCodecCtx->height);
-	m_textuer.InitAudio(m_dstSampleRate, m_dstSampleFmt, m_dstChannels, m_nbSamples);
+	if (InitAudio())
+	{
+		flag = true;
+		m_textuer.InitAudio(m_dstSampleRate, m_dstChannels, m_nbSamples);
+	}
+
+	if (!flag)
+	{
+		return false;
+	}	
+
+	this->m_status = PREPARED;
 
 	// 创建解析线程
-	m_pThreadDecoder = new std::thread(FFAVDecoder::Run, this);
+	m_pThreadDecoder = new std::thread(FFAVDecoder::Run, this, 50);
 	m_pThreadDecoder->detach();
 
-	return 0;
+	return true;
 }
 
-void FFAVDecoder::decoding()
+void FFAVDecoder::decoding(int start)
 {
 	// 帧标记
 	int frameFinished = 0;
 	int frame_index = 1;
 
 	// 计算播放延时
-	uint64_t startTime = FFAVDecoder::CurrentTime();
+	uint64_t startTime = av_gettime();// FFAVDecoder::CurrentTime();
+	fprintf(stdout, "startTime = %d\n", startTime);
 	AVRational time_base = m_pFormatCtx->streams[m_videoStream]->time_base;
 	AVRational time_base_q = { 1, AV_TIME_BASE };
 
 	// 解析数据包
 	AVPacket packet;
 	av_init_packet(&packet);
+
+	av_seek_frame(m_pFormatCtx, -1, start*AV_TIME_BASE, AVSEEK_FLAG_FRAME);
+	int startBase = start*AV_TIME_BASE;
 	while (av_read_frame(m_pFormatCtx, &packet) >= 0 && !m_textuer.CanStop())
 	{
 		//没有pts，简单计算后写入包中 
@@ -227,16 +250,16 @@ void FFAVDecoder::decoding()
 			int total = packet.size;
 			do
 			{
-				//fprintf(stdout, "size = %d\n", total);
-				//fprintf(stdout, "channel_layout = %d\n", m_pFrame->channel_layout);
 				// 解码
-				total -= avcodec_decode_audio4(m_pACodecCtx, m_pFrame, &frameFinished, &packet);
-				if (frameFinished != 0)
+				total -= avcodec_decode_audio4(m_pACodecCtx, m_pAudioFrame, &frameFinished, &packet);
+				if (frameFinished != 0 && m_pASwrCtx)
 				{
-					int numSamplesOut = swr_convert(m_pASwrCtx, m_pAudioBuffer, MAX_AUDIO_FRAME_SIZE,(const uint8_t**)m_pFrame->extended_data, m_pFrame->nb_samples);
-
-					int dst_bufsize = numSamplesOut * m_pACodecCtx->channels * av_get_bytes_per_sample(m_pACodecCtx->sample_fmt);
-					SDL_QueueAudio(1, m_pAudioBuffer[0], dst_bufsize);
+					int numSamplesOut = swr_convert(m_pASwrCtx, m_pAudioBuffer, MAX_AUDIO_FRAME_SIZE, (const uint8_t**)m_pAudioFrame->data, m_pAudioFrame->nb_samples);
+					if (numSamplesOut > 0)
+					{
+						int dst_bufsize = numSamplesOut * this->m_dstChannels * av_get_bytes_per_sample(this->m_dstSampleFmt);
+						SDL_QueueAudio(1, m_pAudioBuffer[0], dst_bufsize);
+					}					
 				}
 				else
 				{
@@ -258,17 +281,24 @@ void FFAVDecoder::decoding()
 			{
 				// 转换为指定格式
 				sws_scale(m_pSwsCtx, m_pFrame->data, m_pFrame->linesize, 0, m_pVCodecCtx->height, m_pFrameRGB->data, m_pFrameRGB->linesize);
-				// 更新显示
-				m_textuer.UpdateFrame(m_pFrameRGB->data[0], m_pFrameRGB->linesize[0]);
 
-				//计算下一帧播放时间			
-				int64_t pts_time = av_rescale_q(packet.pts, time_base, time_base_q) / 1000 - DELAYTIME;
-				int64_t now_time = FFAVDecoder::CurrentTime() - startTime;
-				if (pts_time > now_time)
+				//计算本帧播放时间			
+				// -计算帧时间
+				int64_t pts_time = av_rescale_q(packet.pts, time_base, time_base_q);
+
+				// 从开始播放经过的时间
+				int64_t pass_time = av_gettime() - startTime;
+
+				int64_t diff_time = pts_time - startBase - pass_time;// -1000 * DELAYTIME;
+				if (diff_time > 0)
 				{
-					std::chrono::milliseconds duration(pts_time - now_time);
+					// 延时后播放
+					std::chrono::microseconds duration(diff_time);
 					std::this_thread::sleep_for(duration);
 				}
+
+				// 播放本帧，更新显示
+				m_textuer.UpdateFrame(m_pFrameRGB->data[0], m_pFrameRGB->linesize[0]);
 			}
 		}
 
@@ -283,21 +313,85 @@ void FFAVDecoder::decoding()
 
 
 // 解码媒体文件
-int FFAVDecoder::Run(FFAVDecoder* decoder)
+int FFAVDecoder::Run(FFAVDecoder* decoder, int start)
 {
-	decoder->decoding();
+	decoder->decoding(start);
 	return 0;
 }
 
-uint64_t FFAVDecoder::CurrentTime()
-{
-	timeb t;
-	ftime(&t);
-	return 1000 * t.time + t.millitm;
+int64_t FFAVDecoder::CurrentTime()
+{	
+	HANDLE proc;
+	FILETIME c, e, k, u;
+	proc = GetCurrentProcess();
+	GetProcessTimes(proc, &c, &e, &k, &u);
+
+	int64_t result = ((int64_t)u.dwHighDateTime << 32 | u.dwLowDateTime) / 10;
+	return result;
 }
 
-// 解析视频数据
-bool FFAVDecoder::DecodingVedio()
+
+// 播放视频
+bool FFAVDecoder::Play(int start)
 {
 	return false;
+}
+
+
+// 暂停
+void FFAVDecoder::Pause()
+{
+	this->m_status == FFDecoderStatus::PUASE;
+}
+
+
+// 继续播放
+void FFAVDecoder::Resume()
+{
+	this->m_status == FFDecoderStatus::PLAYING;
+}
+
+
+// 结束播放
+void FFAVDecoder::Stop()
+{
+	this->m_status = FFDecoderStatus::STOP;
+}
+
+
+// 播放状态
+FFDecoderStatus FFAVDecoder::Status()
+{
+	return m_status;
+}
+
+
+// 正在播放？
+bool FFAVDecoder::IsPlaying()
+{
+	return this->m_status == FFDecoderStatus::PLAYING;
+}
+
+
+// 暂停？
+bool FFAVDecoder::IsPuased()
+{
+	return this->m_status == FFDecoderStatus::PUASE;
+}
+
+
+// 结束？
+bool FFAVDecoder::IsStopped()
+{
+	return this->m_status == FFDecoderStatus::STOP;
+}
+
+void FFAVDecoder::ExitThread()
+{
+	m_exitThred = true;
+	while (m_pThreadDecoder && !m_threadExited)
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(DELAYTIME));
+	}
+	m_exitThred = false;
 }

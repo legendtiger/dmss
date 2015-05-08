@@ -6,12 +6,14 @@ extern "C"
 {
 #endif
 
-#include "libavcodec\avcodec.h"
-#include "libavformat\avformat.h"
-#include "libswscale\swscale.h"
-#include "libswresample\swresample.h"
-#include "libavutil\avutil.h"
-#include "libavutil\fifo.h"
+#include "libavcodec/avcodec.h"
+#include "libavformat/avformat.h"
+#include "libswscale/swscale.h"
+#include "libswresample/swresample.h"
+#include "libavutil/avutil.h"
+#include "libavutil/fifo.h"
+#include "libavfilter/avfilter.h"
+#include "libavutil/time.h"
 
 #ifdef __cplusplus
 }

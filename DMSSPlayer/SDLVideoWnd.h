@@ -47,7 +47,7 @@ protected:
 	void Clean();	
 public:
 	// ≥ı ºªØ“Ù∆µ
-	void InitAudio(int freq, int format, int channels, int samples = SDL_AUDIO_BUFFER_SIZE, void* userdata = NULL);
+	void InitAudio(int freq, int channels, int samples = SDL_AUDIO_BUFFER_SIZE);
 };
 
 #endif

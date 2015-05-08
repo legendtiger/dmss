@@ -4,10 +4,19 @@
 #include "SDLVideoWnd.h"
 #include <thread>
 
+enum FFDecoderStatus
+{
+	UNRIPE = -1,
+	PREPARED,
+	PLAYING,
+	PUASE,
+	STOP
+};
+
 class FFAVDecoder
 {
 private:
-	static const int DELAYTIME = 1;
+	static const int DELAYTIME = 10;
 	static const int MAX_AUDIO_FRAME_SIZE = 192000;
 
 private:
@@ -51,6 +60,10 @@ private:
 	SDLVideoWnd & m_textuer;
 
 	std::thread *m_pThreadDecoder;
+
+	bool m_exitThred = false;
+	bool m_threadExited = false;
+
 private:
 	uint64_t m_dstChannelLayout = AV_CH_LAYOUT_STEREO;
 	int m_nbSamples = 1024;
@@ -64,10 +77,10 @@ public:
 
 public:
 	// 播放流
-	int Play(std::string url);
+	bool Init(std::string url);
 
 private:
-	void decoding();
+	void decoding(int start = 0);
 
 	// 获取格式信息
 	bool GetFormatContext(std::string url);
@@ -80,13 +93,44 @@ private:
 
 private:
 	// 解码媒体文件
-	static int Run(FFAVDecoder* decoder);
+	static int Run(FFAVDecoder* decoder, int start);
 
 	// 取系统当前时间，毫秒
-	static uint64_t CurrentTime();
+	static int64_t CurrentTime();
 
-	// 解析视频数据
-	bool DecodingVedio();
+	// 时长
+	int m_duration;
+
+	// 解码播放状态
+	FFDecoderStatus m_status;
+public:
+	// 播放视频
+	bool Play(int start);
+
+	// 暂停
+	void Pause();
+
+	// 继续播放
+	void Resume();
+
+	// 结束播放
+	void Stop();
+
+	// 播放状态
+	FFDecoderStatus Status();
+
+	// 正在播放？
+	bool IsPlaying();
+
+	// 暂停？
+	bool IsPuased();
+
+	// 结束？
+	bool IsStopped();
+
+private:
+	void ExitThread();
+
 };
 
 #endif
