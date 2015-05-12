@@ -51,6 +51,9 @@
     <ClInclude Include="FFPacketQueue.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DMSSPlayer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SDLWindow.cpp">
@@ -84,6 +87,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="FFPacketQueue.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DMSSPlayer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

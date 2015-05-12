@@ -27,7 +27,7 @@ void SDLVideoWnd::InitVideo(int w, int h, Uint32 format)
 	if (m_pVTexture == NULL)
 	{
 		throw SDLError();
-	}
+	}	
 }
 
 SDL_Texture * SDLVideoWnd::DisplayTexture()
@@ -44,7 +44,19 @@ void SDLVideoWnd::Flip()
 {
 	try
 	{
-		SDL_RenderCopy(this->GetRenderer(), this->m_pVTexture, NULL, &this->GetParent()->GetRect());
+		SDL_Rect rt = this->GetParent()->GetRect();
+		/*
+		int width = rt.w / this->GetParent()->GetScaleX();
+		int height = rt.h / this->GetParent()->GetScaleY();
+		fprintf(stdout, "scalex = %0.3f, height = %0.3f ", GetParent()->GetScaleX(), GetParent()->GetScaleY());
+		fprintf(stdout, "width = %d, height = %d\n", width, height);
+		rt.x = (rt.w - width) / 2;
+		rt.y = (rt.h - height) / 2;
+		rt.w = width;
+		rt.h = height;//*/
+		//SDL_RenderSetScale(this->GetRenderer(), this->GetParent()->GetScaleX(), this->GetParent()->GetScaleY());
+		//SDL_RenderSetLogicalSize(this->GetRenderer());
+		SDL_RenderCopy(this->GetRenderer(), this->m_pVTexture, NULL, &rt);
 		m_isChanged = false;
 	}
 	catch (...)

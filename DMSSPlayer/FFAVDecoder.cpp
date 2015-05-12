@@ -1,6 +1,4 @@
 #include "FFAVDecoder.h"
-#include <windows.h>
-
 
 FFAVDecoder::FFAVDecoder(SDLVideoWnd &texture, AVPixelFormat fmt)
 :m_textuer(texture)
@@ -200,11 +198,7 @@ bool FFAVDecoder::Init(std::string url)
 		return false;
 	}	
 
-	this->m_status = PREPARED;
-
-	// 创建解析线程
-	m_pThreadDecoder = new std::thread(FFAVDecoder::Run, this, 50);
-	m_pThreadDecoder->detach();
+	this->m_status = PREPARED;	
 
 	return true;
 }
@@ -216,7 +210,7 @@ void FFAVDecoder::decoding(int start)
 	int frame_index = 1;
 
 	// 计算播放延时
-	uint64_t startTime = av_gettime();// FFAVDecoder::CurrentTime();
+	uint64_t startTime = av_gettime();
 	fprintf(stdout, "startTime = %d\n", startTime);
 	AVRational time_base = m_pFormatCtx->streams[m_videoStream]->time_base;
 	AVRational time_base_q = { 1, AV_TIME_BASE };
@@ -319,22 +313,15 @@ int FFAVDecoder::Run(FFAVDecoder* decoder, int start)
 	return 0;
 }
 
-int64_t FFAVDecoder::CurrentTime()
-{	
-	HANDLE proc;
-	FILETIME c, e, k, u;
-	proc = GetCurrentProcess();
-	GetProcessTimes(proc, &c, &e, &k, &u);
-
-	int64_t result = ((int64_t)u.dwHighDateTime << 32 | u.dwLowDateTime) / 10;
-	return result;
-}
-
 
 // 播放视频
 bool FFAVDecoder::Play(int start)
 {
-	return false;
+	// 创建解析线程
+	m_pThreadDecoder = new std::thread(FFAVDecoder::Run, this, start);
+	m_pThreadDecoder->detach();
+
+	return true;
 }
 
 

@@ -82,6 +82,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DMSSPlayer.h" />
     <ClInclude Include="FFAVDecoder.h" />
     <ClInclude Include="FFCommon.h" />
     <ClInclude Include="FFPacketQueue.h" />
@@ -96,6 +97,7 @@
     <ClInclude Include="SDLWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DMSSPlayer.cpp" />
     <ClCompile Include="DMSSPlayerEntry.cpp" />
     <ClCompile Include="FFAVDecoder.cpp" />
     <ClCompile Include="FFPacketQueue.cpp" />

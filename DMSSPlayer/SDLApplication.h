@@ -18,7 +18,6 @@ private:
 
 	int m_flipFrequency;
 
-private: 
 	SDLWindow *m_pMain = NULL;
 
 public:
@@ -38,10 +37,10 @@ private:
 
 	// 销毁对象
 	void Destroy();
+
 private:
 	// 显示线程执行函数
-	static void FlipCallback(SDLWindow * window, int frequency);
-	
+	static void FlipCallback(SDLWindow * window, int frequency);	
 };
 
 #endif

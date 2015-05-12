@@ -17,6 +17,7 @@ public:
 
 public:
 	SDLWindow(std::string title, int w = DEFAULT_WIDTH, int h = DEFAULT_HIGHT, Uint32 flags = DEFAULT_FLAGS);
+	SDLWindow(int w = DEFAULT_WIDTH, int h = DEFAULT_HIGHT, Uint32 flags = DEFAULT_FLAGS);
 	~SDLWindow();
 
 private:
@@ -29,12 +30,12 @@ private:
 	// 是否刷新窗口
 	bool m_isChanged = true;
 
-public:
-	void show();
+	float m_scaleX = 1.0;
+	float m_scaleY = 1.0;	
+
 	// 窗口标题
 	std::string m_title;
 
-private:
 	// 窗口尺寸
 	int m_width;
 	int m_height;
@@ -42,7 +43,6 @@ private:
 	// 窗口标志
 	Uint32 m_flags;
 
-private:
 	// 保存显示对象
 	std::vector < SDLItemBase*> m_items;
 
@@ -65,6 +65,15 @@ public:
 	// 通知窗口释放资源
 	void Clean();
 
+	virtual void show();
+
+	float GetScaleX();
+	float GetScaleY();
+	SDL_Window* GetWindow();
+
+	int Width();
+	int Height();
+
 	// 定义友元类
 	friend class SDLItemBase;
 
@@ -72,9 +81,9 @@ protected:
 	// 添加显示对象
 	bool Add(SDLItemBase *item);
 
-private:
-	void Create(int w, int h);
+	virtual void Create(int w, int h);
 
+private:
 	// 子窗口是否改变，需要重绘
 	bool ItemIsChanged();	
 };

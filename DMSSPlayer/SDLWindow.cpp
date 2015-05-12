@@ -11,11 +11,19 @@ SDLWindow::SDLWindow(std::string title, int w, int h, Uint32 flags)
 	this->Create(this->m_width, this->m_height);
 }
 
+SDLWindow::SDLWindow(int w, int h, Uint32 flags)
+: m_width(w)
+, m_height(h)
+, m_flags(flags)
+{
+	this->m_title = "";
+	this->Create(this->m_width, this->m_height);
+}
+
 SDLWindow::~SDLWindow()
 {
 	SDL_DestroyRenderer(this->m_pRenderer);
 	SDL_DestroyWindow(this->m_pWindow);
-	SDLUtil::CloseSDL();
 }
 
 void SDLWindow::show()
@@ -62,12 +70,18 @@ bool SDLWindow::HandleEvent(SDL_Event &event)
 				// 此处发现改变窗口大小，视频不刷新需要修改源码中的代码，
 				// 将SDL_OnWindowResized中的SDL_WINDOWEVENT_SIZE_CHANGED更改为SDL_WINDOWEVENT_RESIZED。
 			case SDL_WINDOWEVENT_RESIZED:
-			case SDL_WINDOWEVENT_SIZE_CHANGED:
-			case SDL_WINDOWEVENT_MINIMIZED:
-			case SDL_WINDOWEVENT_MAXIMIZED:
-			case SDL_WINDOWEVENT_RESTORED:			
-				SDL_RenderSetLogicalSize(this->m_pRenderer, event.window.data1, event.window.data2);
-				SDL_RenderSetViewport(this->m_pRenderer, NULL);
+			//case SDL_WINDOWEVENT_SIZE_CHANGED:			
+			//case SDL_WINDOWEVENT_MAXIMIZED:
+			//case SDL_WINDOWEVENT_MINIMIZED:
+			//case SDL_WINDOWEVENT_RESTORED:
+				//fprintf(stdout, "winWidth = %d, winHeight = %d\n", event.window.data1, event.window.data2);
+				//this->m_width = event.window.data1;
+				//this->m_height = event.window.data2;
+				m_scaleX = event.window.data1 * 1.0 / m_width;
+				m_scaleY = event.window.data2 * 1.0 / m_height;
+				//SDL_SetWindowSize(m_pWindow, m_width, m_height);				
+				SDL_RenderSetViewport(m_pRenderer, &this->GetRect());
+				SDL_RenderSetLogicalSize(m_pRenderer, m_width, m_height);
 				m_isChanged = true;
 				break;
 
@@ -153,4 +167,32 @@ SDL_Rect SDLWindow::GetRect()
 {
 	SDL_Rect rt = { 0, 0, this->m_width, this->m_height };
 	return rt;
+}
+
+
+float SDLWindow::GetScaleX()
+{
+	return m_scaleX;
+}
+
+float SDLWindow::GetScaleY()
+{
+	return m_scaleY;
+}
+
+SDL_Window* SDLWindow::GetWindow()
+{
+	return m_pWindow;
+}
+
+
+int SDLWindow::Width()
+{
+	return m_width;
+}
+
+
+int SDLWindow::Height()
+{
+	return m_height;
 }

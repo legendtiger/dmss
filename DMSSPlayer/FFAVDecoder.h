@@ -95,9 +95,6 @@ private:
 	// 解码媒体文件
 	static int Run(FFAVDecoder* decoder, int start);
 
-	// 取系统当前时间，毫秒
-	static int64_t CurrentTime();
-
 	// 时长
 	int m_duration;
 

@@ -1,17 +1,20 @@
 #include "SDLApplication.h"
 #include "SDLCommon.h"
+#include "SDLUtil.h"
 
 bool SDLApplication::terminalFlag;
 
 SDLApplication::SDLApplication(SDLWindow *mainWnd, int flipFrequency)
 :m_pMain(mainWnd), m_flipFrequency(flipFrequency)
 {
+	SDLUtil::InitSDL();
 	this->m_pMain->show();
 }
 
 
 SDLApplication::~SDLApplication()
 {
+	SDLUtil::CloseSDL();
 }
 
 
