@@ -58,7 +58,7 @@
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -95,6 +95,7 @@
     <ClInclude Include="SDLUtil.h" />
     <ClInclude Include="SDLVideoWnd.h" />
     <ClInclude Include="SDLWindow.h" />
+    <ClInclude Include="IWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMSSPlayer.cpp" />

@@ -2,13 +2,12 @@
 #define __DMSS_WINDOW_H
 
 #include "SDLCommon.h"
-#include "SDLObject.h"
-#include "SDLItemBase.h"
+#include "IWindow.h"
 
 #include <string>
 #include <vector>
 
-class SDLWindow : public SDLObject
+class SDLWindow : public IWindow
 {
 public:
 	static const int DEFAULT_WIDTH = 1024;
@@ -44,48 +43,49 @@ private:
 	Uint32 m_flags;
 
 	// 保存显示对象
-	std::vector < SDLItemBase*> m_items;
-
+	std::vector <SDLItemBase*> m_items;
 public:
+	// 获取显示区域
+	SDL_Rect GetRenderRect();
+
+	// 获取SDL窗口
+	SDL_Window* GetWindow();
+
+	// 获取Renderer
+	SDL_Renderer* GetRenderer();
+
+	// 调整窗口尺寸
+	void Resize(int w, int h);
+
 	// 移动窗口
 	void Move(int x, int y);
 
 	// 继承SDLObject的HandleEvent方法
 	bool HandleEvent(SDL_Event &event);
 
-	// 继承SDLObject的Clone方法
-	SDLWindow & Clone();
-
 	// 刷新窗口
 	void Flip();
 
-	// 获取显示窗口
-	SDL_Rect GetRect();
-
 	// 通知窗口释放资源
-	void Clean();
+	void Destroy();
 
 	virtual void show();
 
 	float GetScaleX();
 	float GetScaleY();
-	SDL_Window* GetWindow();
 
 	int Width();
 	int Height();
 
-	// 定义友元类
-	friend class SDLItemBase;
-
-protected:
 	// 添加显示对象
 	bool Add(SDLItemBase *item);
 
+protected:
 	virtual void Create(int w, int h);
 
 private:
 	// 子窗口是否改变，需要重绘
-	bool ItemIsChanged();	
+	bool ItemIsChanged();
 };
 
 #endif

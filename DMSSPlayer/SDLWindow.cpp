@@ -1,23 +1,22 @@
 #include "SDLWindow.h"
-#include "SDLUtil.h"
+#include "SDLVideoWnd.h"
+#include "SDLButton.h"
+#include "FFAVDecoder.h"
 
 SDLWindow::SDLWindow(std::string title, int w, int h, Uint32 flags)
-: m_width(w)
+:IWindow()
+, m_width(w)
 , m_height(h)
 , m_flags(flags)
 {
-	SDLUtil::InitSDL();
 	this->m_title = title;
 	this->Create(this->m_width, this->m_height);
 }
 
 SDLWindow::SDLWindow(int w, int h, Uint32 flags)
-: m_width(w)
-, m_height(h)
-, m_flags(flags)
+:SDLWindow("", w, h, flags)
 {
-	this->m_title = "";
-	this->Create(this->m_width, this->m_height);
+	
 }
 
 SDLWindow::~SDLWindow()
@@ -80,7 +79,7 @@ bool SDLWindow::HandleEvent(SDL_Event &event)
 				m_scaleX = event.window.data1 * 1.0 / m_width;
 				m_scaleY = event.window.data2 * 1.0 / m_height;
 				//SDL_SetWindowSize(m_pWindow, m_width, m_height);				
-				SDL_RenderSetViewport(m_pRenderer, &this->GetRect());
+				SDL_RenderSetViewport(m_pRenderer, &this->GetRenderRect());
 				SDL_RenderSetLogicalSize(m_pRenderer, m_width, m_height);
 				m_isChanged = true;
 				break;
@@ -104,11 +103,6 @@ bool SDLWindow::HandleEvent(SDL_Event &event)
 		flag |= this->m_items[i]->HandleEvent(event);
 	}
 	return flag;
-}
-
-SDLWindow & SDLWindow::Clone()
-{
-	return *this;
 }
 
 // Ë¢ÐÂitem
@@ -136,15 +130,14 @@ bool SDLWindow::ItemIsChanged()
 	{
 		changed |= this->m_items[i]->Changed();
 	}
-
 	return changed;
 }
-void SDLWindow::Clean()
+void SDLWindow::Destroy()
 {
 	int len = this->m_items.size();
 	for (int i = 0; i < len; i++)
 	{
-		this->m_items[i]->Clean();
+		this->m_items[i]->Destroy();
 	}
 }
 
@@ -163,7 +156,7 @@ bool SDLWindow::Add(SDLItemBase *item)
 	return true;
 }
 
-SDL_Rect SDLWindow::GetRect()
+SDL_Rect SDLWindow::GetRenderRect()
 {
 	SDL_Rect rt = { 0, 0, this->m_width, this->m_height };
 	return rt;
@@ -183,6 +176,17 @@ float SDLWindow::GetScaleY()
 SDL_Window* SDLWindow::GetWindow()
 {
 	return m_pWindow;
+}
+
+SDL_Renderer* SDLWindow::GetRenderer()
+{
+	return m_pRenderer;
+}
+
+void SDLWindow::Resize(int w, int h)
+{
+	SDL_SetWindowSize(m_pWindow, w, h);
+	SDL_RenderSetLogicalSize(this->m_pRenderer, w, h);
 }
 
 

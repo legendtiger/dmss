@@ -45,7 +45,7 @@ void SDLObject::Update(void *data)
 	}
 }
 
-void SDLObject::Clean()
+void SDLObject::Destroy()
 {
 
 }

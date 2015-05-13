@@ -19,7 +19,7 @@ private:
 	bool m_stopFlag;
 
 public:
-	SDLVideoWnd(SDLWindow& parent, int x = 0, int y = 0, int w = 800, int h = 600);
+	SDLVideoWnd(IWindow* parent, int x = 0, int y = 0, int w = 800, int h = 600);
 	~SDLVideoWnd();
 
 public:

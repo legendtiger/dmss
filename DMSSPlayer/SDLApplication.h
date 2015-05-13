@@ -2,7 +2,10 @@
 #define __DMSS_APPLICATION_H
 
 #include <thread>
-#include "SDLWindow.h"
+#include "IWindow.h"
+#include "SDLButton.h"
+#include "SDLVideoWnd.h"
+#include "FFAVDecoder.h"
 
 class SDLApplication
 {
@@ -18,10 +21,13 @@ private:
 
 	int m_flipFrequency;
 
-	SDLWindow *m_pMain = NULL;
+	IWindow *m_pMain = NULL;
+	SDLButton *m_pButton = NULL;
+	SDLVideoWnd *m_videoWnd = NULL;
+	FFAVDecoder *m_avDecoder = NULL;
 
 public:
-	SDLApplication(SDLWindow *mainWnd, int flipFrequency = FLIP_FREQUENCY);
+	SDLApplication(int flipFrequency = FLIP_FREQUENCY);
 	~SDLApplication();
 
 public:
@@ -40,7 +46,7 @@ private:
 
 private:
 	// 显示线程执行函数
-	static void FlipCallback(SDLWindow * window, int frequency);	
+	static void FlipCallback(IWindow * window, int frequency);	
 };
 
 #endif

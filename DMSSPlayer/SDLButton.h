@@ -2,6 +2,8 @@
 #define __DMSS_BUTTON_H
 
 #include "SDLItemBase.h"
+#include <string>
+
 class SDLButton : public SDLItemBase
 {
 private:
@@ -19,9 +21,11 @@ private:
 	// 记录鼠标是否在按钮上
 	bool m_isMotion = false;
 
+	bool m_isChange = false;
+
 public:
 	~SDLButton();
-	SDLButton(SDLWindow& parent, std::string text, std::string bkgFileName, int x=0, int y=0, int w=80, int h=35);
+	SDLButton(IWindow* parent, std::string text, std::string bkgFileName, int x = 0, int y = 0, int w = 80, int h = 35);
 
 public:
 	void Flip();
@@ -33,8 +37,10 @@ public:
 	bool HandleEvent(SDL_Event &event);
 
 protected:
-	SDL_Texture * DisplayTexture();
-
+	// 是否需要重绘
 	bool Changed();
+
+	// 取控件贴图 
+	SDL_Texture * DisplayTexture();
 };
 #endif

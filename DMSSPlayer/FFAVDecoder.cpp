@@ -276,7 +276,7 @@ void FFAVDecoder::decoding(int start)
 				// 转换为指定格式
 				sws_scale(m_pSwsCtx, m_pFrame->data, m_pFrame->linesize, 0, m_pVCodecCtx->height, m_pFrameRGB->data, m_pFrameRGB->linesize);
 
-				//计算本帧播放时间			
+				//计算本帧播放时间
 				// -计算帧时间
 				int64_t pts_time = av_rescale_q(packet.pts, time_base, time_base_q);
 
@@ -343,6 +343,7 @@ void FFAVDecoder::Resume()
 void FFAVDecoder::Stop()
 {
 	this->m_status = FFDecoderStatus::STOP;
+	ExitThread();
 }
 
 
@@ -376,9 +377,15 @@ bool FFAVDecoder::IsStopped()
 void FFAVDecoder::ExitThread()
 {
 	m_exitThred = true;
-	while (m_pThreadDecoder && !m_threadExited)
+	while (m_pThreadDecoder!=NULL)
 	{
+		if (m_threadExited)
+		{
+			break;
+		}
+			
 		std::this_thread::sleep_for(std::chrono::milliseconds(DELAYTIME));
 	}
+	m_pThreadDecoder = NULL;
 	m_exitThred = false;
 }

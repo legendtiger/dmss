@@ -37,7 +37,8 @@ public:
 	// 清空监听对象
 	virtual void ClearListener();
 
-	virtual void Clean();
+	// 释放对象资源
+	virtual void Destroy();
 
 protected:
 	virtual void Update(void *data);

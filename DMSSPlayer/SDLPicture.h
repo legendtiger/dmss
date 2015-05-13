@@ -2,13 +2,15 @@
 #define __DMSS_PICTURE_H
 
 #include "SDLItemBase.h"
+#include <string>
+
 class SDLPicture : public SDLItemBase
 {
 private:
 	SDL_Texture *m_pTexture = NULL;
 
 public:
-	SDLPicture(SDLWindow& parent,std::string fileName, int x = 0, int y = 0);
+	SDLPicture(IWindow* parent, std::string fileName, int x = 0, int y = 0);
 	~SDLPicture();
 
 public:

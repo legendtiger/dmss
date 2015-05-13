@@ -1,19 +1,24 @@
 #include "SDLItemBase.h"
-#include "SDLWindow.h"
+#include "IWindow.h"
 
 SDLItemBase::~SDLItemBase()
 {
 }
 
-SDLItemBase::SDLItemBase(SDLWindow& parent, int x, int y, int w, int h)
+SDLItemBase::SDLItemBase(IWindow* parent, int x, int y, int w, int h)
 {
-	parent.Add(this);
-	m_pParent = &parent;
+	if (parent == NULL)
+	{
+		throw SDLError("必须为控件指定父窗口！");
+	}	
+	m_pParent = parent;
 
 	this->m_rt.x = x;
 	this->m_rt.y = y;
 	this->m_rt.w = w;
 	this->m_rt.h = h;
+
+	m_pParent->Add(this);
 }
 
 // 设置item位置
@@ -30,10 +35,6 @@ void SDLItemBase::SetSize(int w, int h)
 	this->m_rt.h = h;
 }
 
-SDL_Renderer * SDLItemBase::GetRenderer()
-{
-	return this->m_pParent->m_pRenderer;
-}
 
 SDL_Rect SDLItemBase::GetRect()
 {
@@ -59,13 +60,13 @@ bool SDLItemBase::PointInItem(int x, int y)
 
 void SDLItemBase::Flip()
 {
-	if (this->GetRenderer() != NULL)
+	if (Changed())
 	{
-		SDL_RenderCopy(this->GetRenderer(), this->DisplayTexture(), NULL, &this->GetRect());
+		SDL_RenderCopy(m_pParent->GetRenderer(), this->DisplayTexture(), NULL, &this->GetRect());
 	}	
 }
 
-SDLWindow *SDLItemBase::GetParent()
+IWindow *SDLItemBase::GetParent()
 {
 	return this->m_pParent;
 }

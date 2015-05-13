@@ -41,8 +41,8 @@ void DMSSPlayer::Create()
 	SDLWindow::Create(this->Width(), this->Height());
 
 	// 创建toolbar窗口
-	m_pToolBar = new SDLWindow(400, 40, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI);
+//	m_pToolBar = new SDLWindow(400, 40, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI);
 
 	// 创建按钮
-	SDLButton bt(*m_pToolBar, "", "K:/JavaStudy/button.bmp");
+//	SDLButton bt(m_pToolBar, "", "K:/JavaStudy/button.bmp");
 }

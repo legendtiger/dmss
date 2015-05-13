@@ -1,5 +1,6 @@
 #include "SDLButton.h"
 #include "SDL_rect.h"
+#include "IWindow.h"
 
 SDLButton::~SDLButton()
 {
@@ -8,7 +9,7 @@ SDLButton::~SDLButton()
 	SDL_DestroyTexture(this->m_pText);
 }
 
-SDLButton::SDLButton(SDLWindow& parent, std::string text, std::string bkgFileName, int x, int y, int w, int h)
+SDLButton::SDLButton(IWindow* parent, std::string text, std::string bkgFileName, int x, int y, int w, int h)
 :SDLItemBase(parent, x, y, w, h), m_text(text)
 {
 	// 导入按钮图片
@@ -18,21 +19,24 @@ SDLButton::SDLButton(SDLWindow& parent, std::string text, std::string bkgFileNam
 		throw SDLError();
 	}
 
+	SDL_zero(m_rtNormal);
 	this->m_rtNormal.w = this->m_pPicture->w / 2;
 	this->m_rtNormal.h = this->m_pPicture->h;
 
+	SDL_zero(m_rtFocus);
 	this->m_rtFocus = this->m_rtNormal;
 	this->m_rtFocus.x = this->m_rtNormal.w + 1;
 
+	SDL_Renderer *pRender = GetParent()->GetRenderer();
 	// 创建按钮文字贴图
 	SDL_Color color = { 0, 0, 0 };
 	TTF_Font *pFont = TTF_OpenFont("k:/JavaStudy/test.ttf", 20);
 	SDL_Surface *sfText = TTF_RenderText_Solid(pFont, this->m_text.c_str(), color);
-	this->m_pText = SDL_CreateTextureFromSurface(this->GetRenderer(), sfText);
+	this->m_pText = SDL_CreateTextureFromSurface(pRender, sfText);
 	SDL_FreeSurface(sfText);
 
 	// 创建背景贴图
-	this->m_pTexture = SDL_CreateTextureFromSurface(this->GetRenderer(), this->m_pPicture);
+	this->m_pTexture = SDL_CreateTextureFromSurface(pRender, this->m_pPicture);
 	if (this->m_pTexture == NULL)
 	{
 		throw SDLError();
@@ -42,19 +46,16 @@ SDLButton::SDLButton(SDLWindow& parent, std::string text, std::string bkgFileNam
 // 刷新显示
 void SDLButton::Flip()
 {
-	SDL_Rect &rt = m_isMotion ? this->m_rtFocus : this->m_rtNormal;
-	SDL_RenderCopy(this->GetRenderer(), this->m_pTexture, &rt, &this->GetRect());
-	SDL_RenderCopy(this->GetRenderer(), this->m_pText, NULL, &this->GetRect());
+		SDL_Rect &rt = m_isMotion ? this->m_rtFocus : this->m_rtNormal;
+		SDL_RenderCopy(GetParent()->GetRenderer(), this->m_pTexture, &rt, &this->GetRect());
+		SDL_RenderCopy(GetParent()->GetRenderer(), this->m_pText, NULL, &this->GetRect());
+		m_isChange = false;
 }
 
-SDL_Texture * SDLButton::DisplayTexture()
-{
-	return NULL;
-}
 
 bool SDLButton::Changed()
 {
-	return false;
+	return m_isChange;
 }
 
 // 设置去除色
@@ -66,7 +67,7 @@ void SDLButton::colorKey(Uint8 r, Uint8 g, Uint8 b, Uint32 flag)
 
 	// 重新创建贴图
 	SDL_DestroyTexture(this->m_pTexture);
-	this->m_pTexture = SDL_CreateTextureFromSurface(this->GetRenderer(), this->m_pPicture);
+	this->m_pTexture = SDL_CreateTextureFromSurface(GetParent()->GetRenderer(), this->m_pPicture);
 	if (this->m_pTexture == NULL)
 	{
 		throw SDLError();
@@ -82,6 +83,7 @@ bool SDLButton::HandleEvent(SDL_Event &event)
 	if (!this->PointInItem(x, y))
 	{
 		m_isMotion = false;
+		m_isChange = true;
 		return false;
 	}
 
@@ -91,6 +93,7 @@ bool SDLButton::HandleEvent(SDL_Event &event)
 	{
 	case SDL_MOUSEMOTION:
 		m_isMotion = true;
+		m_isChange = true;
 		break;
 
 	case SDL_MOUSEBUTTONUP:
@@ -102,4 +105,9 @@ bool SDLButton::HandleEvent(SDL_Event &event)
 	}
 
 	return true;
+}
+
+SDL_Texture * SDLButton::DisplayTexture()
+{
+	return this->m_pTexture;
 }

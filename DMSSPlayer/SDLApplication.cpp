@@ -1,14 +1,17 @@
 #include "SDLApplication.h"
 #include "SDLCommon.h"
 #include "SDLUtil.h"
+#include "SDLVideoWnd.h"
+#include "SDLButton.h"
+#include "FFAVDecoder.h"
+#include "SDLWindow.h"
 
 bool SDLApplication::terminalFlag;
 
-SDLApplication::SDLApplication(SDLWindow *mainWnd, int flipFrequency)
-:m_pMain(mainWnd), m_flipFrequency(flipFrequency)
+SDLApplication::SDLApplication(int flipFrequency)
+:m_flipFrequency(flipFrequency)
 {
-	SDLUtil::InitSDL();
-	this->m_pMain->show();
+	SDLUtil::InitSDL();	
 }
 
 
@@ -52,6 +55,8 @@ void SDLApplication::EventLoop()
 		{
 			SDLApplication::terminalFlag = true;
 
+			m_pMain->Destroy();
+
 			// 等待线程退出
 			while (SDLApplication::terminalFlag)
 			{
@@ -66,7 +71,7 @@ void SDLApplication::EventLoop()
 
 
 // 显示线程执行函数
-void SDLApplication::FlipCallback(SDLWindow * window, int frequency)
+void SDLApplication::FlipCallback(IWindow * window, int frequency)
 {
 	SDLApplication::terminalFlag = false;
 
@@ -85,11 +90,20 @@ void SDLApplication::FlipCallback(SDLWindow * window, int frequency)
 // 应用程序初始化
 void SDLApplication::Initialize()
 {
+	m_pMain = new SDLWindow("DMSS media player");
+	m_videoWnd = new SDLVideoWnd(m_pMain);
+	m_pButton = new SDLButton(m_pMain, "", "k:/javastudy/button.bmp");
+	m_avDecoder = new FFAVDecoder(*m_videoWnd);
+	if (m_avDecoder->Init("k:/javastudy/test.avi"))
+	{
+		m_avDecoder->Play(0);
+	}
+	//this->m_pMain->show();
 }
 
 
 // 销毁对象
 void SDLApplication::Destroy()
 {
-	this->m_pMain->Clean();
+	this->m_pMain->Destroy();
 }

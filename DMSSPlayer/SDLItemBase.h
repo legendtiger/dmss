@@ -4,7 +4,7 @@
 #include "SDLCommon.h"
 #include "SDLObject.h"
 
-class SDLWindow;
+class IWindow;
 
 class SDLItemBase :	public SDLObject
 {
@@ -13,11 +13,11 @@ private:
 	SDL_Rect m_rt;
 
 	// 渲染器
-	SDLWindow *m_pParent = NULL;
+	IWindow *m_pParent;
 
 public:
 	virtual ~SDLItemBase();
-	SDLItemBase(SDLWindow& parent, int x=0, int y=0, int w=0, int h=0);
+	SDLItemBase(IWindow* parent, int x = 0, int y = 0, int w = 0, int h = 0);
 
 	// 设置item位置
 	void SetPosition(int x, int y);
@@ -37,12 +37,13 @@ public:
 	virtual bool PointInItem(int x, int y);
 
 	// 获取父窗口
-	SDLWindow *GetParent();
+	IWindow *GetParent();
 
 	virtual bool Changed() = 0;
-protected:
-	SDL_Renderer * GetRenderer();
 
+protected:
+
+	// 控件贴图对象
 	virtual SDL_Texture * DisplayTexture()=0;	
 };
 
