@@ -21,7 +21,7 @@ private:
 
 	int m_flipFrequency;
 
-	IWindow *m_pMain = NULL;
+	dmss::IWindow *m_pMain = NULL;
 	SDLButton *m_pButton = NULL;
 	SDLVideoWnd *m_videoWnd = NULL;
 	FFAVDecoder *m_avDecoder = NULL;
@@ -46,7 +46,7 @@ private:
 
 private:
 	// 显示线程执行函数
-	static void FlipCallback(IWindow * window, int frequency);	
+	static void FlipCallback(dmss::IWindow * window, int frequency);
 };
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef __DMSS_FFMPEG_COMMON_H
-#define __DMSS_FFMPEG_COMMON_H
+#ifndef __IMPORT_FFMPEG_H
+#define __IMPORT_FFMPEG_H
 
 #ifdef __cplusplus
 extern "C"

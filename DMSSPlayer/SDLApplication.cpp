@@ -1,5 +1,5 @@
 #include "SDLApplication.h"
-#include "SDLCommon.h"
+#include "ImportSDL.h"
 #include "SDLUtil.h"
 #include "SDLVideoWnd.h"
 #include "SDLButton.h"
@@ -11,13 +11,13 @@ bool SDLApplication::terminalFlag;
 SDLApplication::SDLApplication(int flipFrequency)
 :m_flipFrequency(flipFrequency)
 {
-	SDLUtil::InitSDL();	
+	dmss::SDLUtil::InitSDL();
 }
 
 
 SDLApplication::~SDLApplication()
 {
-	SDLUtil::CloseSDL();
+	dmss::SDLUtil::CloseSDL();
 }
 
 
@@ -71,7 +71,7 @@ void SDLApplication::EventLoop()
 
 
 // 显示线程执行函数
-void SDLApplication::FlipCallback(IWindow * window, int frequency)
+void SDLApplication::FlipCallback(dmss::IWindow * window, int frequency)
 {
 	SDLApplication::terminalFlag = false;
 

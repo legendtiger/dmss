@@ -1,5 +1,5 @@
-#ifndef __DMSS_SDL_COMMON_H
-#define __DMSS_SDL_COMMON_H
+#ifndef __IMPORT_SDL_H
+#define __IMPORT_SDL_H
 
 
 #ifdef __cplusplus

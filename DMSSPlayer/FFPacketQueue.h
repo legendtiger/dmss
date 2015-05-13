@@ -1,7 +1,7 @@
 #ifndef __DMSS_FFPACKETQUEUE_H
 #define __DMSS_FFPACKETQUEUE_H
-#include "SDLCommon.h"
-#include "FFCommon.h"
+#include "ImportSDL.h"
+#include "ImportFFMpeg.h"
 
 #include <queue>
 

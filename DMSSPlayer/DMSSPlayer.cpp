@@ -3,7 +3,7 @@
 #include "SDLPicture.h"
 #include "SDLButton.h"
 #include "SDLVideoWnd.h"
-#include "FFCommon.h"
+#include "ImportFFMpeg.h"
 #include "SDLApplication.h"
 #include "FFAVDecoder.h"
 

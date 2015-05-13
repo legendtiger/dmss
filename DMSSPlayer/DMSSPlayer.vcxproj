@@ -84,13 +84,13 @@
   <ItemGroup>
     <ClInclude Include="DMSSPlayer.h" />
     <ClInclude Include="FFAVDecoder.h" />
-    <ClInclude Include="FFCommon.h" />
+    <ClInclude Include="ImportFFMpeg.h" />
     <ClInclude Include="FFPacketQueue.h" />
     <ClInclude Include="SDLApplication.h" />
     <ClInclude Include="SDLButton.h" />
-    <ClInclude Include="SDLCommon.h" />
+    <ClInclude Include="ImportSDL.h" />
     <ClInclude Include="SDLItemBase.h" />
-    <ClInclude Include="SDLObject.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="SDLPicture.h" />
     <ClInclude Include="SDLUtil.h" />
     <ClInclude Include="SDLVideoWnd.h" />
@@ -105,7 +105,7 @@
     <ClCompile Include="SDLApplication.cpp" />
     <ClCompile Include="SDLButton.cpp" />
     <ClCompile Include="SDLItemBase.cpp" />
-    <ClCompile Include="SDLObject.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="SDLPicture.cpp" />
     <ClCompile Include="SDLUtil.cpp" />
     <ClCompile Include="SDLVideoWnd.cpp" />

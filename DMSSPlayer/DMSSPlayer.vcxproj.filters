@@ -21,22 +21,13 @@
     <ClInclude Include="SDLUtil.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="SDLObject.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="SDLItemBase.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="SDLPicture.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="SDLCommon.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="SDLButton.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="FFCommon.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="SDLVideoWnd.h">
@@ -55,6 +46,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="IWindow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ImportFFMpeg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ImportSDL.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -77,9 +77,6 @@
     <ClCompile Include="SDLButton.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="SDLObject.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="SDLVideoWnd.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -93,6 +90,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DMSSPlayer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

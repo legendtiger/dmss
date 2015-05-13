@@ -1,6 +1,6 @@
 #ifndef __DMSS_FFAVDECODER_H
 #define __DMSS_FFAVDECODER_H
-#include "FFCommon.h"
+#include "ImportFFMpeg.h"
 #include "SDLVideoWnd.h"
 #include <thread>
 

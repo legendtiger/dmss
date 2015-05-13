@@ -2,24 +2,24 @@
 #define __DMSS_PICTURE_H
 
 #include "SDLItemBase.h"
+#include "IWindow.h"
 #include <string>
 
-class SDLPicture : public SDLItemBase
-{
-private:
-	SDL_Texture *m_pTexture = NULL;
+	class SDLPicture : public SDLItemBase
+	{
+	private:
+		SDL_Texture *m_pTexture = NULL;
 
-public:
-	SDLPicture(IWindow* parent, std::string fileName, int x = 0, int y = 0);
-	~SDLPicture();
+	public:
+		SDLPicture(IWindow* parent, std::string fileName, int x = 0, int y = 0);
+		~SDLPicture();
 
-public:
-	bool HandleEvent(SDL_Event &event);
+	public:
+		bool HandleEvent(SDL_Event &event);
 
-protected:
-	SDL_Texture * DisplayTexture();
+	protected:
+		SDL_Texture * DisplayTexture();
 
-	bool Changed();
-};
-
+		bool Changed();
+	};
 #endif
