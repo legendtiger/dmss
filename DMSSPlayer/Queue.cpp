@@ -1,20 +1,20 @@
-#include "FFPacketQueue.h"
+#include "Queue.h"
+using namespace dmss::ffmpeg;
 
-
-FFPacketQueue::FFPacketQueue()
+Queue::Queue()
 {
 	m_mutex = SDL_CreateMutex();
 	m_cond = SDL_CreateCond();
 }
 
 
-FFPacketQueue::~FFPacketQueue()
+Queue::~Queue()
 {
 	SDL_DestroyMutex(m_mutex);
 	SDL_DestroyCond(m_cond);
 }
 
-void FFPacketQueue::Push(AVPacket *packet)
+void Queue::Push(AVPacket *packet)
 {
 	//avcodec_decode_audio4
 	SDL_LockMutex(m_mutex);
@@ -25,7 +25,7 @@ void FFPacketQueue::Push(AVPacket *packet)
 	SDL_UnlockMutex(m_mutex);
 }
 
-AVPacket* FFPacketQueue::Pop()
+AVPacket* Queue::Pop()
 {
 	AVPacket *packet = this->m_queue.front();
 	this->m_queue.pop();

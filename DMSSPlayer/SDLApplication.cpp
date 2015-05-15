@@ -1,9 +1,9 @@
 #include "SDLApplication.h"
 #include "ImportSDL.h"
 #include "SDLUtil.h"
-#include "SDLVideoWnd.h"
-#include "SDLButton.h"
-#include "FFAVDecoder.h"
+#include "Video.h"
+#include "Button.h"
+#include "AVDecoder.h"
 #include "SDLWindow.h"
 
 bool SDLApplication::terminalFlag;
@@ -11,13 +11,13 @@ bool SDLApplication::terminalFlag;
 SDLApplication::SDLApplication(int flipFrequency)
 :m_flipFrequency(flipFrequency)
 {
-	dmss::SDLUtil::InitSDL();
+	SDLUtil::InitSDL();
 }
 
 
 SDLApplication::~SDLApplication()
 {
-	dmss::SDLUtil::CloseSDL();
+	SDLUtil::CloseSDL();
 }
 
 
@@ -71,7 +71,7 @@ void SDLApplication::EventLoop()
 
 
 // 显示线程执行函数
-void SDLApplication::FlipCallback(dmss::IWindow * window, int frequency)
+void SDLApplication::FlipCallback(IWindow * window, int frequency)
 {
 	SDLApplication::terminalFlag = false;
 
@@ -91,9 +91,9 @@ void SDLApplication::FlipCallback(dmss::IWindow * window, int frequency)
 void SDLApplication::Initialize()
 {
 	m_pMain = new SDLWindow("DMSS media player");
-	m_videoWnd = new SDLVideoWnd(m_pMain);
-	m_pButton = new SDLButton(m_pMain, "", "k:/javastudy/button.bmp");
-	m_avDecoder = new FFAVDecoder(*m_videoWnd);
+	m_videoWnd = new Video(m_pMain);
+	m_pButton = new Button(m_pMain, "", "k:/javastudy/button.bmp");
+	m_avDecoder = new AVDecoder(*m_videoWnd);
 	if (m_avDecoder->Init("k:/javastudy/test.avi"))
 	{
 		m_avDecoder->Play(0);

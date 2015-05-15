@@ -1,6 +1,8 @@
-#include "FFAVDecoder.h"
+#include "AVDecoder.h"
 
-FFAVDecoder::FFAVDecoder(SDLVideoWnd &texture, AVPixelFormat fmt)
+using namespace dmss::ffmpeg;
+
+AVDecoder::AVDecoder(Video &texture, AVPixelFormat fmt)
 :m_textuer(texture)
 , m_duration(0)
 , m_status(UNRIPE)
@@ -14,7 +16,7 @@ FFAVDecoder::FFAVDecoder(SDLVideoWnd &texture, AVPixelFormat fmt)
 }
 
 
-FFAVDecoder::~FFAVDecoder()
+AVDecoder::~AVDecoder()
 {
 	av_frame_free(&m_pFrame);
 	av_frame_free(&m_pFrameRGB);
@@ -35,7 +37,7 @@ FFAVDecoder::~FFAVDecoder()
 	avformat_close_input(&this->m_pFormatCtx);
 }
 
-bool FFAVDecoder::GetFormatContext(std::string url)
+bool AVDecoder::GetFormatContext(std::string url)
 {
 	// 打开媒体文件
 	if (avformat_open_input(&this->m_pFormatCtx, url.c_str(), NULL, NULL) != 0)
@@ -55,7 +57,7 @@ bool FFAVDecoder::GetFormatContext(std::string url)
 	return true;
 }
 
-int FFAVDecoder::FindStream(AVMediaType type)
+int AVDecoder::FindStream(AVMediaType type)
 {
 	// 找到视频和音频流
 	for (unsigned int i = 0; i < this->m_pFormatCtx->nb_streams; i++)
@@ -69,7 +71,7 @@ int FFAVDecoder::FindStream(AVMediaType type)
 	return -1;
 }
 
-bool FFAVDecoder::InitVedio()
+bool AVDecoder::InitVedio()
 {
 	// 找到视频流/音频流
 	this->m_videoStream = this->FindStream(AVMEDIA_TYPE_VIDEO);
@@ -116,7 +118,7 @@ bool FFAVDecoder::InitVedio()
 	return true;
 }
 
-bool FFAVDecoder::InitAudio()
+bool AVDecoder::InitAudio()
 {
 	// 找到视频流/音频流
 	this->m_audioStream = this->FindStream(AVMEDIA_TYPE_AUDIO);
@@ -171,7 +173,7 @@ bool FFAVDecoder::InitAudio()
 }
 
 // 播放流
-bool FFAVDecoder::Init(std::string url)
+bool AVDecoder::Init(std::string url)
 {
 	// 获取流信息
 	if (!GetFormatContext(url))
@@ -203,7 +205,7 @@ bool FFAVDecoder::Init(std::string url)
 	return true;
 }
 
-void FFAVDecoder::decoding(int start)
+void AVDecoder::decoding(int start)
 {
 	// 帧标记
 	int frameFinished = 0;
@@ -307,7 +309,7 @@ void FFAVDecoder::decoding(int start)
 
 
 // 解码媒体文件
-int FFAVDecoder::Run(FFAVDecoder* decoder, int start)
+int AVDecoder::Run(AVDecoder* decoder, int start)
 {
 	decoder->decoding(start);
 	return 0;
@@ -315,10 +317,10 @@ int FFAVDecoder::Run(FFAVDecoder* decoder, int start)
 
 
 // 播放视频
-bool FFAVDecoder::Play(int start)
+bool AVDecoder::Play(int start)
 {
 	// 创建解析线程
-	m_pThreadDecoder = new std::thread(FFAVDecoder::Run, this, start);
+	m_pThreadDecoder = new std::thread(AVDecoder::Run, this, start);
 	m_pThreadDecoder->detach();
 
 	return true;
@@ -326,55 +328,55 @@ bool FFAVDecoder::Play(int start)
 
 
 // 暂停
-void FFAVDecoder::Pause()
+void AVDecoder::Pause()
 {
-	this->m_status == FFDecoderStatus::PUASE;
+	this->m_status = DecoderStatus::PUASE;
 }
 
 
 // 继续播放
-void FFAVDecoder::Resume()
+void AVDecoder::Resume()
 {
-	this->m_status == FFDecoderStatus::PLAYING;
+	this->m_status = DecoderStatus::PLAYING;
 }
 
 
 // 结束播放
-void FFAVDecoder::Stop()
+void AVDecoder::Stop()
 {
-	this->m_status = FFDecoderStatus::STOP;
+	this->m_status = DecoderStatus::STOP;
 	ExitThread();
 }
 
 
 // 播放状态
-FFDecoderStatus FFAVDecoder::Status()
+DecoderStatus AVDecoder::Status()
 {
 	return m_status;
 }
 
 
 // 正在播放？
-bool FFAVDecoder::IsPlaying()
+bool AVDecoder::IsPlaying()
 {
-	return this->m_status == FFDecoderStatus::PLAYING;
+	return this->m_status == DecoderStatus::PLAYING;
 }
 
 
 // 暂停？
-bool FFAVDecoder::IsPuased()
+bool AVDecoder::IsPuased()
 {
-	return this->m_status == FFDecoderStatus::PUASE;
+	return this->m_status == DecoderStatus::PUASE;
 }
 
 
 // 结束？
-bool FFAVDecoder::IsStopped()
+bool AVDecoder::IsStopped()
 {
-	return this->m_status == FFDecoderStatus::STOP;
+	return this->m_status == DecoderStatus::STOP;
 }
 
-void FFAVDecoder::ExitThread()
+void AVDecoder::ExitThread()
 {
 	m_exitThred = true;
 	while (m_pThreadDecoder!=NULL)

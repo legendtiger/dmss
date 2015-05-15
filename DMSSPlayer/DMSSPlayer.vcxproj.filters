@@ -21,28 +21,7 @@
     <ClInclude Include="SDLUtil.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="SDLItemBase.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="SDLPicture.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="SDLButton.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="SDLVideoWnd.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="SDLApplication.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="FFAVDecoder.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="FFPacketQueue.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DMSSPlayer.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="IWindow.h">
@@ -57,6 +36,39 @@
     <ClInclude Include="Object.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Picture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Video.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="AVDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Queue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SafeQueue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="IPlayer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="IDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Decoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="AVPlayer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SDLWindow.cpp">
@@ -65,34 +77,43 @@
     <ClCompile Include="SDLUtil.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="DMSSPlayerEntry.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="SDLItemBase.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="SDLPicture.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="SDLButton.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="SDLVideoWnd.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="SDLApplication.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="FFAVDecoder.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="FFPacketQueue.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DMSSPlayer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Object.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Picture.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Video.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AVDecoder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Queue.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="IPlayer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="IDecoder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Decoder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AVPlayer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

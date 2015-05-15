@@ -1,10 +1,10 @@
 #ifndef __DMSS_OBJECT_H
 #define __DMSS_OBJECT_H
 
-#include "ImportSDL.h"
 #include <string>
 #include <set>
-
+namespace dmss
+{
 	class Observer
 	{
 	public:
@@ -26,7 +26,7 @@
 		virtual void Destroy();
 	};
 
-	class Observable:public Object
+	class Observable :public Object
 	{
 	public:
 		Observable();
@@ -36,9 +36,6 @@
 		std::set<Observer *> m_listeners;
 
 	public:
-		// 处理SDL事件，返回false继续传递事件，反之处理完事件
-		virtual bool HandleEvent(SDL_Event &event) = 0;
-
 		// 添加监听对象
 		virtual void AddListener(Observer *listener);
 
@@ -55,17 +52,18 @@
 		bool Find(Observer *listener);
 	};
 
-	class SDLError
+	class Error
 	{
 	private:
 		std::string m_msg = "";
 
 	public:
-		SDLError(){ this->m_msg = SDL_GetError(); };
-		SDLError(std::string error){ this->m_msg = error; };
-		~SDLError(){};
+		Error(){ };
+		Error(std::string error){ this->m_msg = error; };
+		~Error(){};
 
 	public:
-		std::string GetError(){ return this->m_msg; };
+		std::string Message(){ return this->m_msg; };
 	};
+}
 #endif

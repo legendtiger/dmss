@@ -3,9 +3,12 @@
 
 #include <thread>
 #include "IWindow.h"
-#include "SDLButton.h"
-#include "SDLVideoWnd.h"
-#include "FFAVDecoder.h"
+#include "Button.h"
+#include "Video.h"
+#include "AVDecoder.h"
+
+using namespace dmss::sdl;
+using namespace dmss::ffmpeg;
 
 class SDLApplication
 {
@@ -21,10 +24,10 @@ private:
 
 	int m_flipFrequency;
 
-	dmss::IWindow *m_pMain = NULL;
-	SDLButton *m_pButton = NULL;
-	SDLVideoWnd *m_videoWnd = NULL;
-	FFAVDecoder *m_avDecoder = NULL;
+	IWindow *m_pMain = NULL;
+	Button *m_pButton = NULL;
+	Video *m_videoWnd = NULL;
+	AVDecoder *m_avDecoder = NULL;
 
 public:
 	SDLApplication(int flipFrequency = FLIP_FREQUENCY);
@@ -46,7 +49,7 @@ private:
 
 private:
 	// 显示线程执行函数
-	static void FlipCallback(dmss::IWindow * window, int frequency);
+	static void FlipCallback(IWindow * window, int frequency);
 };
 
 #endif

@@ -58,7 +58,7 @@
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -82,33 +82,40 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="DMSSPlayer.h" />
-    <ClInclude Include="FFAVDecoder.h" />
+    <ClInclude Include="AVDecoder.h" />
+    <ClInclude Include="AVPlayer.h" />
+    <ClInclude Include="Decoder.h" />
+    <ClInclude Include="IDecoder.h" />
     <ClInclude Include="ImportFFMpeg.h" />
-    <ClInclude Include="FFPacketQueue.h" />
+    <ClInclude Include="IPlayer.h" />
+    <ClInclude Include="Queue.h" />
+    <ClInclude Include="SafeQueue.h" />
     <ClInclude Include="SDLApplication.h" />
-    <ClInclude Include="SDLButton.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="ImportSDL.h" />
-    <ClInclude Include="SDLItemBase.h" />
+    <ClInclude Include="Component.h" />
     <ClInclude Include="Object.h" />
-    <ClInclude Include="SDLPicture.h" />
+    <ClInclude Include="Picture.h" />
     <ClInclude Include="SDLUtil.h" />
-    <ClInclude Include="SDLVideoWnd.h" />
+    <ClInclude Include="Video.h" />
     <ClInclude Include="SDLWindow.h" />
     <ClInclude Include="IWindow.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DMSSPlayer.cpp" />
-    <ClCompile Include="DMSSPlayerEntry.cpp" />
-    <ClCompile Include="FFAVDecoder.cpp" />
-    <ClCompile Include="FFPacketQueue.cpp" />
+    <ClCompile Include="AVPlayer.cpp" />
+    <ClCompile Include="Decoder.cpp" />
+    <ClCompile Include="IDecoder.cpp" />
+    <ClCompile Include="IPlayer.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="AVDecoder.cpp" />
+    <ClCompile Include="Queue.cpp" />
     <ClCompile Include="SDLApplication.cpp" />
-    <ClCompile Include="SDLButton.cpp" />
-    <ClCompile Include="SDLItemBase.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Component.cpp" />
     <ClCompile Include="Object.cpp" />
-    <ClCompile Include="SDLPicture.cpp" />
+    <ClCompile Include="Picture.cpp" />
     <ClCompile Include="SDLUtil.cpp" />
-    <ClCompile Include="SDLVideoWnd.cpp" />
+    <ClCompile Include="Video.cpp" />
     <ClCompile Include="SDLWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

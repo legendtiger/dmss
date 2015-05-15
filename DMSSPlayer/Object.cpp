@@ -1,4 +1,5 @@
 #include "Object.h"
+using namespace dmss;
 
 	Object::Object()
 	{
