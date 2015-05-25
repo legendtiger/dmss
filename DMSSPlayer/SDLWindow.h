@@ -39,10 +39,6 @@ namespace dmss
 			// 窗口标题
 			std::string m_title;
 
-			// 窗口尺寸
-			int m_width;
-			int m_height;
-
 			// 窗口标志
 			Uint32 m_flags;
 

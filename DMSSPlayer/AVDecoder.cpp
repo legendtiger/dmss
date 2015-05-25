@@ -5,7 +5,7 @@ using namespace dmss::ffmpeg;
 AVDecoder::AVDecoder(Video &texture, AVPixelFormat fmt)
 :m_textuer(texture)
 , m_duration(0)
-, m_status(UNRIPE)
+, m_status(PlayStatus::UNRIPE)
 {
 	this->m_fmt = fmt;
 
@@ -108,8 +108,9 @@ bool AVDecoder::InitVedio()
 	int numBytes = avpicture_get_size(this->m_fmt, m_pVCodecCtx->width, m_pVCodecCtx->height);
 	this->m_buffer = (uint8_t *)av_malloc(numBytes*sizeof(uint8_t));
 
+	avpicture_alloc((AVPicture *)m_pFrameRGB, m_fmt, m_pVCodecCtx->width, m_pVCodecCtx->height);
 	// 初始化填充目标帧
-	avpicture_fill((AVPicture *)m_pFrameRGB, m_buffer, m_fmt, m_pVCodecCtx->width, m_pVCodecCtx->height);
+	//avpicture_fill((AVPicture *)m_pFrameRGB, m_buffer, m_fmt, m_pVCodecCtx->width, m_pVCodecCtx->height);
 
 	// 创建图形转换对象
 	m_pSwsCtx = sws_getContext(m_pVCodecCtx->width, m_pVCodecCtx->height,
@@ -168,7 +169,7 @@ bool AVDecoder::InitAudio()
 
 	// 分配转码buffer  
 	av_samples_alloc_array_and_samples(&m_pAudioBuffer, &m_audioSize, m_dstChannels, m_dstSampleRate, m_dstSampleFmt, 0);
-
+	fprintf(stdout, "channels = %d, sample_rate = %d, format = %d", m_dstChannels, m_dstSampleRate, m_dstSampleFmt);
 	return true;
 }
 
@@ -200,7 +201,7 @@ bool AVDecoder::Init(std::string url)
 		return false;
 	}	
 
-	this->m_status = PREPARED;	
+	this->m_status = PlayStatus::PREPARED;	
 
 	return true;
 }
@@ -294,7 +295,7 @@ void AVDecoder::decoding(int start)
 				}
 
 				// 播放本帧，更新显示
-				m_textuer.UpdateFrame(m_pFrameRGB->data[0], m_pFrameRGB->linesize[0]);
+				m_textuer.Update(m_pFrameRGB->data[0], m_pFrameRGB->linesize[0]);
 			}
 		}
 
@@ -330,27 +331,27 @@ bool AVDecoder::Play(int start)
 // 暂停
 void AVDecoder::Pause()
 {
-	this->m_status = DecoderStatus::PUASE;
+	this->m_status = PlayStatus::PUASE;
 }
 
 
 // 继续播放
 void AVDecoder::Resume()
 {
-	this->m_status = DecoderStatus::PLAYING;
+	this->m_status = PlayStatus::PLAYING;
 }
 
 
 // 结束播放
 void AVDecoder::Stop()
 {
-	this->m_status = DecoderStatus::STOP;
+	this->m_status = PlayStatus::STOP;
 	ExitThread();
 }
 
 
 // 播放状态
-DecoderStatus AVDecoder::Status()
+PlayStatus AVDecoder::Status()
 {
 	return m_status;
 }
@@ -359,21 +360,21 @@ DecoderStatus AVDecoder::Status()
 // 正在播放？
 bool AVDecoder::IsPlaying()
 {
-	return this->m_status == DecoderStatus::PLAYING;
+	return this->m_status == PlayStatus::PLAYING;
 }
 
 
 // 暂停？
 bool AVDecoder::IsPuased()
 {
-	return this->m_status == DecoderStatus::PUASE;
+	return this->m_status == PlayStatus::PUASE;
 }
 
 
 // 结束？
 bool AVDecoder::IsStopped()
 {
-	return this->m_status == DecoderStatus::STOP;
+	return this->m_status == PlayStatus::STOP;
 }
 
 void AVDecoder::ExitThread()

@@ -90,14 +90,20 @@ void SDLApplication::FlipCallback(IWindow * window, int frequency)
 // 应用程序初始化
 void SDLApplication::Initialize()
 {
-	m_pMain = new SDLWindow("DMSS media player");
-	m_videoWnd = new Video(m_pMain);
-	m_pButton = new Button(m_pMain, "", "k:/javastudy/button.bmp");
+	//*
+	m_pMain = m_pLayMain = new PlayWindow("DMSS media player");
+	m_pLayMain->Play("k:/javastudy/test.wmv");
+	//*/
+	/*
+	m_pMain = m_pTestMain = new SDLWindow("DMSS media player");
+	m_videoWnd = new Video(m_pTestMain);
+	//m_pButton = new Button(m_pTestMain, "", "k:/javastudy/button.bmp");
 	m_avDecoder = new AVDecoder(*m_videoWnd);
 	if (m_avDecoder->Init("k:/javastudy/test.avi"))
 	{
 		m_avDecoder->Play(0);
 	}
+	//*/
 	//this->m_pMain->show();
 }
 

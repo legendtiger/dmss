@@ -5,16 +5,6 @@
 #include <set>
 namespace dmss
 {
-	class Observer
-	{
-	public:
-		Observer(){};
-		virtual ~Observer(){};
-
-	public:
-		virtual void Update(void *data) = 0;
-	};
-
 	class Object
 	{
 	public:
@@ -24,6 +14,16 @@ namespace dmss
 	public:
 		// 释放对象资源
 		virtual void Destroy();
+	};
+
+	class Observer:public Object
+	{
+	public:
+		Observer(){};
+		virtual ~Observer(){};
+
+	public:
+		virtual void Update(void *data, int size) = 0;
 	};
 
 	class Observable :public Object
@@ -46,7 +46,7 @@ namespace dmss
 		virtual void ClearListener();
 
 	protected:
-		virtual void Update(void *data);
+		virtual void Update(void *data, int size);
 
 	private:
 		bool Find(Observer *listener);

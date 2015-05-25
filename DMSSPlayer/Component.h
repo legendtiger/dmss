@@ -10,7 +10,7 @@ namespace dmss
 	{
 		class IWindow;
 
-		class Component : public Observable
+		class Component : public Observer
 		{
 		private:
 			// 显示位置大小
@@ -21,7 +21,7 @@ namespace dmss
 
 		public:
 			virtual ~Component();
-			Component(IWindow* parent, int x = 0, int y = 0, int w = 0, int h = 0);
+			Component(IWindow* parent, int x, int y, int w, int h);
 
 			// 设置item位置
 			void SetPosition(int x, int y);
@@ -49,7 +49,6 @@ namespace dmss
 			virtual bool HandleEvent(SDL_Event &event) = 0;
 
 		protected:
-
 			// 控件贴图对象
 			virtual SDL_Texture * DisplayTexture() = 0;
 		};

@@ -2,19 +2,20 @@
 #define __DMSS_APPLICATION_H
 
 #include <thread>
-#include "IWindow.h"
-#include "Button.h"
+#include "PlayWindow.h"
 #include "Video.h"
+#include "Button.h"
 #include "AVDecoder.h"
+#include "SDLWindow.h"
 
-using namespace dmss::sdl;
 using namespace dmss::ffmpeg;
+using namespace dmss::sdl;
 
 class SDLApplication
 {
 private:
 	// 默认Flip间隔
-	static const int FLIP_FREQUENCY = 1;
+	static const int FLIP_FREQUENCY = 10;
 
 	// 退出Flip线程标志
 	static bool terminalFlag;
@@ -23,10 +24,14 @@ private:
 	std::thread *flipThread = NULL;
 
 	int m_flipFrequency;
-
 	IWindow *m_pMain = NULL;
-	Button *m_pButton = NULL;
+
+	PlayWindow *m_pLayMain = NULL;
+
+	SDLWindow *m_pTestMain = NULL;
+
 	Video *m_videoWnd = NULL;
+
 	AVDecoder *m_avDecoder = NULL;
 
 public:

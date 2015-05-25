@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="dmss::ffmpeg::AudioDecoder" Collapsed="true">
+    <Position X="18.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABEAEAAAAAACEEhCAAAAgEBAQAAAIAA=</HashCode>
+      <FileName>AudioDecoder.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::ffmpeg::AVDecoder" Collapsed="true">
+    <Position X="23.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>avdecoder.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::ffmpeg::AVPlayer" Collapsed="true">
+    <Position X="16.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQCgAAAEwhAAIQAEACAAAAAAgEBAgAAIoAIACJgAAAA=</HashCode>
+      <FileName>AVPlayer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::ffmpeg::Unpacker" Collapsed="true">
+    <Position X="0.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAEIFAAAAAQAAEBAAEAAQABCAAEAIAA=</HashCode>
+      <FileName>Unpacker.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::ffmpeg::IPlayer" Collapsed="true">
+    <Position X="16.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>iplayer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::ffmpeg::IUnpacking" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAEAAgAAAAAABAgAEAAAAAAAAAAAAAABCAAABAAA=</HashCode>
+      <FileName>IUnpacking.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::ffmpeg::IDecoder" Collapsed="true">
+    <Position X="19.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAEAAAAAAAAAAAAAAAAAAAAAAAAAEBAAAAABAA=</HashCode>
+      <FileName>IDecoder.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::ffmpeg::Queue" Collapsed="true">
+    <Position X="26.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAICAAIAAAAAAAAAAAQACAAAAAAACAAAAICAA=</HashCode>
+      <FileName>Queue.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::ffmpeg::VideoDecoder" Collapsed="true">
+    <Position X="20.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAIAAAAAAABAEAAgAAAAAAAhAAAAAAEBCABAIAAA=</HashCode>
+      <FileName>VideoDecoder.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::SafeQueue&lt;T&gt;" Collapsed="true">
+    <Position X="23.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIAAAAAAAACAEEAAAAAAAAAAACAAMQAA=</HashCode>
+      <FileName>SafeQueue.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::Object" Collapsed="true">
+    <Position X="10.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAgAAAAAAAAAABAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Object.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::Observer" Collapsed="true">
+    <Position X="9.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>Object.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::Observable" Collapsed="true">
+    <Position X="19.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYAAAAAAABAABAAAAAAAAQAAAAIIAAAAAIAAAAAAAA=</HashCode>
+      <FileName>Object.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::Error" Collapsed="true">
+    <Position X="25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEQAAAAAAAAAAEAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Object.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SDLApplication" Collapsed="true">
+    <Position X="25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAQQICASAAAIAAAFAAgEAAAAAQAAAAAA=</HashCode>
+      <FileName>SDLApplication.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::sdl::Button" Collapsed="true">
+    <Position X="9.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQAIACAAIACAgQABAIQAAEAEABAAAAAIAAAAgEAAAA=</HashCode>
+      <FileName>Button.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::sdl::IWindow" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAIAAAAAAAAAQAAEAAAAAACAAAAAgIEGAAAA=</HashCode>
+      <FileName>IWindow.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::sdl::Component" Collapsed="true">
+    <Position X="10.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>component.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::sdl::Picture" Collapsed="true">
+    <Position X="14" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAIAAAAAABAAQAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Picture.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::sdl::SDLUtil" Collapsed="true">
+    <Position X="26.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABABAAACAAgAAAAAAQAAAAIAAAIAAAA=</HashCode>
+      <FileName>SDLUtil.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::sdl::Video" Collapsed="true">
+    <Position X="7.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>video.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::sdl::SDLWindow" Collapsed="true">
+    <Position X="2.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAQAAARMAAAAAhAAUQQEEAAABgAGCIJAAgAYGAACI=</HashCode>
+      <FileName>SDLWindow.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::sdl::AudioRender" Collapsed="true">
+    <Position X="5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQgAAAAgAAQAAAAAAAAAAAAIAAABAAAoAAAAAAAAAA=</HashCode>
+      <FileName>AudioRender.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="dmss::sdl::VideoRender" Collapsed="true">
+    <Position X="11.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAgAAAAAABAIQQAEAAAAAAAAAIAACAAAAAAE=</HashCode>
+      <FileName>VideoRender.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="dmss::ffmpeg::AudioLayout" Collapsed="true">
+    <Position X="23.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAACAAAAAAAAAAAAAACAAAAAAAAAAAABAQAAAAAAA=</HashCode>
+      <FileName>AudioDecoder.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="dmss::ffmpeg::PacketItem" Collapsed="true">
+    <Position X="26.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>iplayer.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="dmss::ffmpeg::DecodeInfo" Collapsed="true">
+    <Position X="25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAoAEAACBAAAAAAIAAQAAQAIAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>IUnpacking.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="dmss::ffmpeg::MediaType" Collapsed="true">
+    <Position X="23.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABQAAAAAAAAAAAAAAAAAAAIAAAAAAAgAAAA=</HashCode>
+      <FileName>IUnpacking.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="dmss::ffmpeg::PlayStatus" Collapsed="true">
+    <Position X="25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>iplayer.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="微软雅黑" Size="9" />
+</ClassDiagram>

@@ -60,13 +60,31 @@
     <ClInclude Include="IPlayer.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="AVPlayer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="VideoDecoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Unpacker.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="IDecoder.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Decoder.h">
+    <ClInclude Include="IUnpacking.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="AVPlayer.h">
+    <ClInclude Include="AudioRender.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="VideoRender.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayWindow.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -107,14 +125,35 @@
     <ClCompile Include="IPlayer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="IDecoder.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Decoder.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="AVPlayer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="AudioDecoder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="VideoDecoder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Unpacker.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="IDecoder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="IUnpacking.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioRender.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="VideoRender.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayWindow.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

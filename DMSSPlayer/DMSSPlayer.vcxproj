@@ -56,11 +56,15 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -82,12 +86,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AudioDecoder.h" />
+    <ClInclude Include="AudioRender.h" />
     <ClInclude Include="AVDecoder.h" />
     <ClInclude Include="AVPlayer.h" />
-    <ClInclude Include="Decoder.h" />
-    <ClInclude Include="IDecoder.h" />
+    <ClInclude Include="PlayWindow.h" />
+    <ClInclude Include="Unpacker.h" />
+    <ClInclude Include="IUnpacking.h" />
     <ClInclude Include="ImportFFMpeg.h" />
     <ClInclude Include="IPlayer.h" />
+    <ClInclude Include="IDecoder.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="SafeQueue.h" />
     <ClInclude Include="SDLApplication.h" />
@@ -100,12 +108,18 @@
     <ClInclude Include="Video.h" />
     <ClInclude Include="SDLWindow.h" />
     <ClInclude Include="IWindow.h" />
+    <ClInclude Include="VideoDecoder.h" />
+    <ClInclude Include="VideoRender.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AudioDecoder.cpp" />
+    <ClCompile Include="AudioRender.cpp" />
     <ClCompile Include="AVPlayer.cpp" />
-    <ClCompile Include="Decoder.cpp" />
-    <ClCompile Include="IDecoder.cpp" />
+    <ClCompile Include="PlayWindow.cpp" />
+    <ClCompile Include="Unpacker.cpp" />
+    <ClCompile Include="IUnpacking.cpp" />
     <ClCompile Include="IPlayer.cpp" />
+    <ClCompile Include="IDecoder.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="AVDecoder.cpp" />
     <ClCompile Include="Queue.cpp" />
@@ -117,6 +131,11 @@
     <ClCompile Include="SDLUtil.cpp" />
     <ClCompile Include="Video.cpp" />
     <ClCompile Include="SDLWindow.cpp" />
+    <ClCompile Include="VideoDecoder.cpp" />
+    <ClCompile Include="VideoRender.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

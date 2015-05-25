@@ -40,6 +40,11 @@ namespace dmss
 			// 处理SDL事件，返回false继续传递事件，反之处理完事件
 			bool HandleEvent(SDL_Event &event);
 
+			void Destroy();
+		private:
+			// 更新贴图
+			void Update(void *data, int size);
+
 		protected:
 			// 是否需要重绘
 			bool Changed();

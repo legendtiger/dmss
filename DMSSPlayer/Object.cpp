@@ -50,11 +50,12 @@ using namespace dmss;
 		this->m_listeners.clear();
 	}
 
-	void Observable::Update(void *data)
+	void Observable::Update(void *data, int size)
 	{
 		std::set <Observer *>::iterator it = m_listeners.begin();
 		while (it != m_listeners.end())
 		{
-			(*it)->Update(data);
+			(*it)->Update(data, size);
+			it++;
 		}
 	}

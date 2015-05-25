@@ -28,7 +28,7 @@ namespace dmss
 
 		public:
 			// 更新帧数据
-			void UpdateFrame(void * pixels, int pitch);
+			void Update(void * pixels, int pitch);
 
 			// 初始化视频
 			void InitVideo(int w, int h, Uint32 format = SDL_PIXELFORMAT_YV12);
@@ -43,6 +43,7 @@ namespace dmss
 			// 解码线程完成或终止
 			void DecodeFinished();
 
+			void Destroy();
 		protected:
 			SDL_Texture * DisplayTexture();
 

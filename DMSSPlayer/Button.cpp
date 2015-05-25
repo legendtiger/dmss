@@ -99,7 +99,6 @@ bool Button::HandleEvent(SDL_Event &event)
 		break;
 
 	case SDL_MOUSEBUTTONUP:
-		this->Update(NULL);
 		break;
 
 	default:
@@ -112,4 +111,14 @@ bool Button::HandleEvent(SDL_Event &event)
 SDL_Texture * Button::DisplayTexture()
 {
 	return this->m_pTexture;
+}
+
+void Button::Update(void *data, int size)
+{
+
+}
+
+void Button::Destroy()
+{
+
 }

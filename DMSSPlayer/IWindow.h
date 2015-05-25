@@ -11,8 +11,12 @@ namespace dmss
 		class IWindow : public Object
 		{
 		public:
-			IWindow(){};
+			IWindow(int width, int height):m_width(width),m_height(height){};
 			virtual ~IWindow(){};
+
+		protected:
+			int m_width;
+			int m_height;
 
 		public:
 			// 获取显示区域

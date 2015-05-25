@@ -3,6 +3,7 @@
 #include "ImportFFMpeg.h"
 #include "Video.h"
 #include <thread>
+#include "IPlayer.h"
 
 using namespace dmss::sdl;
 
@@ -10,15 +11,6 @@ namespace dmss
 {
 	namespace ffmpeg
 	{
-		enum DecoderStatus
-		{
-			UNRIPE = -1,
-			PREPARED,
-			PLAYING,
-			PUASE,
-			STOP
-		};
-
 		class AVDecoder
 		{
 		private:
@@ -105,7 +97,7 @@ namespace dmss
 			int m_duration;
 
 			// 解码播放状态
-			DecoderStatus m_status;
+			PlayStatus	m_status;
 		public:
 			// 播放视频
 			bool Play(int start);
@@ -120,7 +112,7 @@ namespace dmss
 			void Stop();
 
 			// 播放状态
-			DecoderStatus Status();
+			PlayStatus Status();
 
 			// 正在播放？
 			bool IsPlaying();

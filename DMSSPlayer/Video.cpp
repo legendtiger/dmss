@@ -15,7 +15,7 @@ Video::~Video()
 	SDL_DestroyTexture(m_pVTexture);
 }
 
-void Video::UpdateFrame(void * pixels, int pitch)
+void Video::Update(void * pixels, int pitch)
 {
 	SDL_UpdateTexture(this->m_pVTexture, NULL, pixels, pitch);
 	m_isChanged = true;
@@ -113,10 +113,15 @@ void Video::InitAudio(int freq, int channels, int samples)
 		throw Error(SDL_GetError());
 	}
 
-	fprintf(stdout, "freq相等？%s\n", wanted_spec.freq == spec.freq ? "true" : "false");
-	fprintf(stdout, "format相等%d=%d？%s\n", wanted_spec.format, spec.format, wanted_spec.format == spec.format ? "true" : "false");
-	fprintf(stdout, "channels相等？%s\n", wanted_spec.channels == spec.channels ? "true" : "false");
-	fprintf(stdout, "samples相等？%s\n", wanted_spec.samples == spec.samples ? "true" : "false");
+	fprintf(stdout, "freq相等？%d = %d \n", wanted_spec.freq, spec.freq);
+	fprintf(stdout, "format相等? %d = %d \n", wanted_spec.format, spec.format);
+	fprintf(stdout, "channels相等？%d = %d \n", wanted_spec.channels, spec.channels);
+	fprintf(stdout, "samples相等？%d = %d \n", wanted_spec.samples, spec.samples);
 
 	SDL_PauseAudio(0);
+}
+
+void Video::Destroy()
+{
+
 }

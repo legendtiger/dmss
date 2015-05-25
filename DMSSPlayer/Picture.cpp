@@ -3,7 +3,7 @@
 using namespace dmss::sdl;
 
 Picture::Picture(IWindow* parent, std::string fileName, int x, int y)
-:Component(parent, x, y)
+:Component(parent, x, y, 0, 0)
 {
 	SDL_Surface *bmp = IMG_Load(fileName.c_str());
 	if (bmp == NULL)

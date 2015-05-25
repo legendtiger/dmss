@@ -1,5 +1,5 @@
 #include "IPlayer.h"
-#include "IDecoder.h"
+#include "IUnpacking.h"
 using namespace dmss;
 using namespace dmss::ffmpeg;
 
@@ -13,21 +13,28 @@ IPlayer::~IPlayer()
 {
 }
 
-void IPlayer::AddDecoder(IDecoder* decoder)
+void IPlayer::AddUnpacker(IUnpacking* unpacker)
 {
-	m_pDecoder = decoder;
-	if (m_pDecoder == NULL)
+	m_pUnpacker = unpacker;
+	if (m_pUnpacker == NULL)
 	{
 		throw "错误！必须传递IDecoder对象。";
 	}
 }
 
-IDecoder * IPlayer::GetDecoder()
+IUnpacking * IPlayer::Unpacker()
 { 
-	return m_pDecoder; 
+	return m_pUnpacker;
 };
 
-void IPlayer::SendPackage(AVPacket &packet)
+void IPlayer::SendPackage(PacketItem *packet)
 {
-	m_queue.enqueue(packet);
+	if (packet->packet.stream_index == m_pUnpacker->GetDecodeInfo().audioIndex)
+	{
+		m_audioQueue.enqueue(packet);
+	}
+	else if (packet->packet.stream_index == m_pUnpacker->GetDecodeInfo().videoIndex)
+	{
+		m_videoQueue.enqueue(packet);
+	}
 }

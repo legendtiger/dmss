@@ -6,8 +6,7 @@
 using namespace dmss::sdl;
 
 SDLWindow::SDLWindow(std::string title, int w, int h, Uint32 flags)
-: m_width(w)
-, m_height(h)
+: IWindow(w, h)
 , m_flags(flags)
 {
 	this->m_title = title;

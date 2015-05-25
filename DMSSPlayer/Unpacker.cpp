@@ -1,9 +1,10 @@
-#include "Decoder.h"
+#include "Unpacker.h"
+#include "IPlayer.h"
 
 using namespace dmss::ffmpeg;
 
-Decoder::Decoder(IPlayer* player, int interval)
-:IDecoder(player), m_interval(interval)
+Unpacker::Unpacker(IPlayer* player, int interval)
+:IUnpacking(player), m_interval(interval)
 {
 	avcodec_register_all();
 	avfilter_register_all();
@@ -12,12 +13,12 @@ Decoder::Decoder(IPlayer* player, int interval)
 }
 
 
-Decoder::~Decoder()
+Unpacker::~Unpacker()
 {
 }
 
 // 初始化媒体
-bool Decoder::Init(std::string url)
+bool Unpacker::Init(std::string url)
 {
 	ResetDecodeInfo();
 
@@ -25,48 +26,92 @@ bool Decoder::Init(std::string url)
 }
 
 // 从指定位置开始解码, start指定位置，单位为秒			
-void Decoder::Decoding(int start)
+void Unpacker::Unpacking(int start)
 {
 	// 退出已有线程
 	ExitThread();
 
 	// 开启解码线程
 	m_startTime = start;
+
 	std::thread thread(DecodeThread, this);
 	thread.detach();
 }
 
-void Decoder::ReadPacket()
+void Unpacker::ReadPacket()
 {
 	// 起始位置
-	int startBase = m_startTime * AV_TIME_BASE;	
-
-	// 初始化数据包
-	AVPacket packet;
-	av_init_packet(&packet);
+	int startBase = m_startTime * AV_TIME_BASE;		
 
 	// 跳到解包位置
 	av_seek_frame(m_decodeInfo.pFormatCtx, -1, startBase, AVSEEK_FLAG_FRAME);
 
+	DecodeInfo &info = m_decodeInfo;
+	AVRational time_base_q = { 1, AV_TIME_BASE };
+
+	// 计算timestamp方法
+	auto Timestamp = [&](AVPacket packet)->int64_t
+	{ 
+		return av_rescale_q(packet.pts, info.pFormatCtx->streams[packet.stream_index]->time_base, time_base_q);
+	};
+
+	auto Duration = [&](AVPacket packet)->int64_t
+	{
+		return av_rescale_q(packet.duration, info.pFormatCtx->streams[packet.stream_index]->time_base, time_base_q);
+	};
+
+	// 初始化数据包
+	AVPacket packet;	
+	av_init_packet(&packet);
+
 	// 解包
+	PacketItem *item = NULL;
 	while (av_read_frame(m_decodeInfo.pFormatCtx, &packet) >= 0)
 	{
+		//fprintf(stdout, "pts = %d，解包完毕！", item->packet.pts);
 		// 停止读数据包
 		if (m_stopDecode)
 		{
 			break;
 		}
 
-		// 将解出的数据包传递到播放对象
-		Dispatch(packet);
+		if (!(packet.stream_index == info.audioIndex || packet.stream_index == info.videoIndex))
+		{
+			av_free_packet(&packet);
+			continue;
+		}
 
+		// 计算timestamp
+		item = new PacketItem();
+		item->packet = packet;
+		item->timestamp = Timestamp(item->packet);
+		item->duration = Duration(item->packet);
+
+		//fprintf(stdout, "timestamp=%u, stream_index = %d\n", item->timestamp, packet.stream_index);
+		
+		// 将解出的数据包传递到播放对象
+		Dispatch(item);
+
+		// 释放CPU占用
 		std::this_thread::sleep_for(m_interval);
 	}
 
+	// 放置最后一个空包
+	item = new PacketItem();
+	item->packet.stream_index = info.audioIndex;
+	item->isLast = true;
+	Dispatch(item);
+
+	item = new PacketItem();
+	item->packet.stream_index = info.videoIndex;
+	item->isLast = true;
+	Dispatch(item);
+
 	m_stopDecode = false;
+	fprintf(stdout, "Unpacker解包完毕！");
 }
 
-bool Decoder::GetFormatContext(std::string url)
+bool Unpacker::GetFormatContext(std::string url)
 {
 	m_decodeInfo.url = url;
 
@@ -95,7 +140,7 @@ bool Decoder::GetFormatContext(std::string url)
 
 	// 音频流
 	m_decodeInfo.audioIndex = FindStream(AVMEDIA_TYPE_AUDIO);
-	if (m_decodeInfo.videoIndex != -1)
+	if (m_decodeInfo.audioIndex != -1)
 	{
 		m_decodeInfo.pACodecCtx = m_decodeInfo.pFormatCtx->streams[m_decodeInfo.audioIndex]->codec;
 		m_decodeInfo.mediaType = MediaType(0 | m_decodeInfo.mediaType | MediaType::ONLEAUDIO);
@@ -107,7 +152,7 @@ bool Decoder::GetFormatContext(std::string url)
 }
 
 // 获取流
-int Decoder::FindStream(AVMediaType type)
+int Unpacker::FindStream(AVMediaType type)
 {
 	// 找到视频和音频流
 	for (unsigned int i = 0; i < m_decodeInfo.pFormatCtx->nb_streams; i++)
@@ -121,12 +166,12 @@ int Decoder::FindStream(AVMediaType type)
 	return -1;
 }
 
-void Decoder::DecodeThread(Decoder* decoder)
+void Unpacker::DecodeThread(Unpacker* unpacker)
 {
-	decoder->ReadPacket();
+	unpacker->ReadPacket();
 }
 
-void Decoder::Destroy()
+void Unpacker::Destroy()
 {
 	// 退出线程
 	ExitThread();
@@ -135,7 +180,7 @@ void Decoder::Destroy()
 	ResetDecodeInfo();
 }
 
-void Decoder::ExitThread()
+void Unpacker::ExitThread()
 {
 	// 线程没有启动
 	if (!m_stopDecode)

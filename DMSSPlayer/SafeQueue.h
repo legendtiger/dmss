@@ -31,27 +31,24 @@ namespace dmss
 
 	public:
 		// 进队
-		void enqueue(T &obj)
+		void enqueue(T obj)
 		{
 			std::lock_guard<std::mutex> lock(m_mutex);
-			m_queue.push(std::forward<T>(obj));
-
-			// 通知已有数据
-			m_cVar.notify_one();
+			m_queue.push(obj);
+			//fprintf(stdout, "enqueueSize = %d\n", m_queue.size());
 		};
 
 		// 出队
-		T* dequeue(int timeout = COOPERATIVE_TIMEOUT_INFINITE)
+		T dequeue()
 		{
-			std::unique_lock<std::mutex> lock(m_mutex);
-			while (m_queue.empty())
+			std::lock_guard<std::mutex> lock(m_mutex);
+			//fprintf(stdout, "dequeueSize = %d\n", m_queue.size());
+			if (m_queue.empty())
 			{
-				if (m_cVar.wait_for(lock, timeout) == std::cv_status::timeout)
-				{
-					return NULL;
-				}
+				return NULL;
 			}
-			T *ret = &m_queue.front();
+
+			T ret = m_queue.front();
 			m_queue.pop();
 			return ret;
 		};
